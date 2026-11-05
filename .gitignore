@@ -1,66 +1,16 @@
-# ==========================================
-# Game Con Rắn (Snake Apple) - Git Ignore
-# ==========================================
-
-# --- Decompiled & Raw Dump Resources ---
+# Local reverse-engineering tools, dumps, and scratch files
 /.analysis/
 /Apple-Worm-2/
 /AssetRipper_win_x64/
 /Snake+Apple_1.1.6_APKPure/
-/Snake+Apple_1.1.6_APKPure.xapk
 /SnakeApple_ExportedProject/
-*.xapk
-*.apk
-mxx.png
-skin.png
 
-# --- Unity Generated Folders (Recursive) ---
-**/[Ll]ibrary/
-**/[Tt]emp/
-**/[Oo]bj/
-**/[Bb]uild/
-**/[Bb]uilds/
-**/[Ll]ogs/
-**/[Uu]ser[Ss]ettings/
-**/[Mm]emoryCaptures/
-**/[Rr]ecordings/
-**/[Aa]sset[Cc]ache/
+/mxx.png
+/skin.png
 
-# --- Gradle & Mobile Build Artifacts ---
-.gradle/
-**/ExportedObj/
-*.aab
-*.unitypackage
-*.app
-sysinfo.txt
-crashlytics-build.properties
+# Unity project exclusions are maintained in v2/.gitignore.
 
-# --- IDE & Solution Files ---
-.vs/
-.idea/
-.vscode/
-*.csproj
-*.unityproj
-*.sln
-*.suo
-*.tmp
-*.user
-*.userprefs
-*.pidb
-*.booproj
-*.svd
-*.pdb
-*.mdb
-*.opendb
-*.VC.db
-*.sln.iml
-
-# --- Unity Meta Files for Ignored Artifacts ---
-*.pidb.meta
-*.pdb.meta
-*.mdb.meta
-
-# --- OS Generated Files ---
+# OS metadata
 .DS_Store
 .DS_Store?
 ._*
