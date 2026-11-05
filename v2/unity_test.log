@@ -1,0 +1,25 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+Built from '6000.3/staging' branch; Version is '6000.3.21f1 (c02631ffc030) revision 12592689'; Using compiler version '194234433'; Build Type 'Release'
+OS: 'Windows 11  (10.0.22000) Professional' Language: 'en' Physical Memory: 16289 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1
+System  architecture: x64
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-Dell M4800" at "2026-11-03T03:52:36.1373834Z"
+Process architecture: x64
+Date: 2026-11-03T03:52:36Z
+
+COMMAND LINE ARGUMENTS:
+E:\Unity Editor\6000.3.21f1\Editor\Unity.exe
+-batchmode
+-nographics
+-projectPath
+g:\hackgame\game  con rắn\v2
+-runTests
+-testPlatform
+editmode
+-testResults
+g:\hackgame\game  con rắn\v2\test_results.xml
+-logFile
+g:\hackgame\game  con rắn\v2\unity_test.log
+Successfully changed project path to: g:\hackgame\game  con rắn\v2
+G:/hackgame/game  con rắn/v2
+Exiting without the bug reporter. Application will terminate with return code 1

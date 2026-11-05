@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a39d8856cbf4d8e9069a1288f6a01bc, type: 3}
+  m_Name: DefaultItemSkin
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Items.GameplayItemSkin
+  appleNormal: {fileID: 21300000, guid: 6449fbf21e9e8b042953c1c9eb511e94, type: 3}
+  appleVip: {fileID: 21300000, guid: 586e21462f8ae1d4d875978e15e8e68f, type: 3}
+  exitPortal: {fileID: 21300000, guid: ace5010b84e96b64cbcaa6690ff21a84, type: 3}
+  exitPortalFrame: {fileID: 21300000, guid: f4559111483a6914e89a6bec57c94827, type: 3}
+  teleportBlue: {fileID: 21300000, guid: f6d3e198a88740c4ebe64ddd809c580c, type: 3}
+  teleportOrange: {fileID: 21300000, guid: 5a7bee1024b28df46881199e73a68056, type: 3}
+  spike: {fileID: 21300000, guid: 101c8a824fdd8554aa2eb7c71603e1f5, type: 3}
+  toxicAcid: {fileID: 21300000, guid: e2698dbbe4b675d4c878edff270c011b, type: 3}
+  spiderWeb: {fileID: 21300000, guid: 2cdee053f28a6b145b735b20933aa55e, type: 3}
+  rock: {fileID: 21300000, guid: 21b9a2f8f195cc44aa8c9cb0d9b02e6a, type: 3}
+  bomb: {fileID: 21300000, guid: 9e2ad8282f294221859f96c4d9b038f3, type: 3}
+  bombRemote: {fileID: 21300000, guid: 995328e81ddcf4cd489395e0f9eb8f80, type: 3}
+  slidePlatform: {fileID: 21300000, guid: 06ad3af5e32404d4db91c136fed36fdf, type: 3}
+  buttonReleased: {fileID: 21300000, guid: 3803a2d1a9f58b942a79a45fcfa3d536, type: 3}
+  buttonPressed: {fileID: 21300000, guid: 4c8f81cb38a6a2c4a93386564ceb8666, type: 3}
+  doorBarBlue: {fileID: 21300000, guid: be4a8b7b17df1f149a5bdbc8739601cd, type: 3}
+  doorBarGreen: {fileID: 21300000, guid: 610021dd68afc2f45849c0ba25b0da69, type: 3}
+  doorLock: {fileID: 21300000, guid: 49837dad42b72a14d9c991a9a39c5e25, type: 3}
+  laserGun: {fileID: 21300000, guid: b117658d5dcad974cb8ef45119d4785e, type: 3}
+  laserBeam: {fileID: 21300000, guid: fa41498ba3a6ba64abc2dc34e0be098b, type: 3}

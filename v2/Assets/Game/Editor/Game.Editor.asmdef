@@ -1,0 +1,21 @@
+{
+  "name": "Game.Editor",
+  "rootNamespace": "SnakeApple.Editor",
+  "references": [
+    "Game.Domain",
+    "Game.Application",
+    "Game.Infrastructure",
+    "Game.Presentation"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

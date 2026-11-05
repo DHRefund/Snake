@@ -1,0 +1,17 @@
+{
+  "name": "Game.Application",
+  "rootNamespace": "SnakeApple.Application",
+  "references": [
+    "Game.Domain"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": true
+}
+

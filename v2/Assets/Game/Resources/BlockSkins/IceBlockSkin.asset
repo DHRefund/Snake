@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8198d1d429bf422998ed3a0aaa75bb4c, type: 3}
+  m_Name: IceBlockSkin
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Blocks.AutotileBlockSkin
+  masks:
+  - variants:
+    - {fileID: 21300000, guid: ffbd1cb047657e04eaae51b027c42a53, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 823b7b4dd76cf2a43aeef4d7558cdf38, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 4a4e47041c027b242a5862a3eaa83b50, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 32f5d44829b4b4443849feedce9e94b3, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 1731275d5613a0c4d904aeee4ef24d55, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 3cf04b3e8306cb24e92581fecaaed217, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 665b565ae485b9544878da84b3c3422d, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 3da6ce594b4910548b7c670387f7bc3e, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 2dd5b297af232154082c6d40451f94da, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 9af409348228d5547abc1576f29878a5, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 19740e43d1209ce44a5c479c60c67560, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: 213e01935b83a6b479b9e8bb11b24632, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: a5298d13acbb8404aa071a58f95d8d74, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: ab6dae949add9b64285fbaab3e922d1f, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: ad70666fa6a8b054ab1c86dc2ebda22c, type: 3}
+  - variants:
+    - {fileID: 21300000, guid: f67c7d45da9df8844b4b6671d2989039, type: 3}

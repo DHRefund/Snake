@@ -1,0 +1,71 @@
+# ==========================================
+# Game Con Rắn (Snake Apple) - Git Ignore
+# ==========================================
+
+# --- Decompiled & Raw Dump Resources ---
+/.analysis/
+/Apple-Worm-2/
+/AssetRipper_win_x64/
+/Snake+Apple_1.1.6_APKPure/
+/Snake+Apple_1.1.6_APKPure.xapk
+/SnakeApple_ExportedProject/
+*.xapk
+*.apk
+mxx.png
+skin.png
+
+# --- Unity Generated Folders (Recursive) ---
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+**/[Aa]sset[Cc]ache/
+
+# --- Gradle & Mobile Build Artifacts ---
+.gradle/
+**/ExportedObj/
+*.aab
+*.unitypackage
+*.app
+sysinfo.txt
+crashlytics-build.properties
+
+# --- IDE & Solution Files ---
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.sln.iml
+
+# --- Unity Meta Files for Ignored Artifacts ---
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# --- OS Generated Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini

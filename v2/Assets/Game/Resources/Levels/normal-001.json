@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "normal-001",
+  "mode": "normal",
+  "displayNumber": 1,
+  "size": { "width": 9, "height": 7 },
+  "gravity": "down",
+  "initialResolve": false,
+  "tiles": [
+    "#########",
+    "#.......#",
+    "#....a..#",
+    "#.tooH..#",
+    "#....E..#",
+    "#.......#",
+    "#########"
+  ],
+  "entities": [],
+  "links": [],
+  "solution": {
+    "rulesVersion": 1,
+    "commands": ["up", "right", "down", "down", "left"]
+  },
+  "metadata": {
+    "difficulty": 1,
+    "tags": ["prototype", "apple", "exit"],
+    "author": "team",
+    "notes": "First executable V2 core loop sample."
+  }
+}
+

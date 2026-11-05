@@ -1,0 +1,20 @@
+{
+  "name": "Game.Presentation",
+  "rootNamespace": "SnakeApple.Presentation",
+  "references": [
+    "Game.Domain",
+    "Game.Application",
+    "Game.Infrastructure",
+    "spine-unity",
+    "spine-csharp"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
