@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd1408b0df40d7ad9cddc0d5784f26, type: 3}
+  m_Name: Skin_nemo
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSpriteSkin
+  head: {fileID: 21300000, guid: b25ff35c653f41b7b871d1b28ff661d3, type: 3}
+  headWidthInCells: 1
+  headHeightInCells: 1
+  bodyPhases:
+  - {fileID: 21300000, guid: 4602ca8dfc874f899f06df9e8d794b0a, type: 3}
+  - {fileID: 21300000, guid: ccf1fc6a576e49b68c3f31b124030934, type: 3}
+  - {fileID: 21300000, guid: 349fb6d05f584ccaaf90d687a7b10bd5, type: 3}
+  - {fileID: 21300000, guid: e3423aea94fd4745904b6c7c0d4766fa, type: 3}
+  - {fileID: 21300000, guid: bb30785783f64760a0fc9103e0fabb32, type: 3}
+  - {fileID: 21300000, guid: 7050775b53814c089af846f09853a03e, type: 3}
+  - {fileID: 21300000, guid: 3ec2d151604540c2acfa9bbbee653f8c, type: 3}
+  - {fileID: 21300000, guid: 3e738679fbd74a8886594dd121ffb3c4, type: 3}
+  cornerPhases:
+  - {fileID: 21300000, guid: 39a5d80ac07a4cd3a9dcc5c7b1333993, type: 3}
+  - {fileID: 21300000, guid: 96963a193fc343ada4fa5841abc6d1be, type: 3}
+  - {fileID: 21300000, guid: 2accc87893bc454692999b1fa38e6508, type: 3}
+  - {fileID: 21300000, guid: ce6114899c9e45368a06cb9774162e80, type: 3}
+  - {fileID: 21300000, guid: 43b2f6eaf41648a28976854155e3b736, type: 3}
+  - {fileID: 21300000, guid: 835d0dddc884461d9eefc67b6764abe5, type: 3}
+  - {fileID: 21300000, guid: 7bd3e30f19644604b98a116dd3dc17eb, type: 3}
+  - {fileID: 21300000, guid: 357de90566d24ec892a031242c75dab8, type: 3}
+  cornerOutsidePhases:
+  - {fileID: 21300000, guid: a3a90decb9eb42b9ac8145d6cf6d2260, type: 3}
+  - {fileID: 21300000, guid: 7eab0af70f124f6ebef381cc25badbbb, type: 3}
+  - {fileID: 21300000, guid: 7e7148297c7b411f95c910f8016d6d6c, type: 3}
+  - {fileID: 21300000, guid: 5ad7594af7284b00b0d2e4e815e8618a, type: 3}
+  - {fileID: 21300000, guid: 7796b967ff3a40b0aa0fdfb95eb66e67, type: 3}
+  - {fileID: 21300000, guid: 5049fab5fdd9467d81fb5f3a2b646be9, type: 3}
+  - {fileID: 21300000, guid: f5f6b89ae26b450f80658fbbfa5616c9, type: 3}
+  - {fileID: 21300000, guid: 37d4b396246e471d8028ab518f89ca6a, type: 3}
+  tailPhases:
+  - {fileID: 21300000, guid: 3b567171bd8e488fb1350a45cf6609dc, type: 3}
+  - {fileID: 21300000, guid: 01c12c7161ba43699033770228427998, type: 3}
+  - {fileID: 21300000, guid: e13558625b884cffb8628aecd474b65d, type: 3}
+  - {fileID: 21300000, guid: 937841ee63b54dd2b122678abe1dc405, type: 3}
+  - {fileID: 21300000, guid: 717d10b3945b457abf8df623d7fd039c, type: 3}
+  - {fileID: 21300000, guid: d52f05728eb34817ae3a0141ca06bbca, type: 3}
+  - {fileID: 21300000, guid: 323b7e8f06ac4218a1beafa160fc57a3, type: 3}
+  - {fileID: 21300000, guid: 7e5643e4d24145ecbda632d8bd80a673, type: 3}
+  useSpineHead: 1
+  spineSkinName: skin_nemo
+  skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: 20eb2bd0b3234dbfb893bdb57d5bac0a, type: 3}

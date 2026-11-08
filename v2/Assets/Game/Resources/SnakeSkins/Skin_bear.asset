@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd1408b0df40d7ad9cddc0d5784f26, type: 3}
+  m_Name: Skin_bear
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSpriteSkin
+  head: {fileID: 21300000, guid: 1fc425d121474c8f822f59bf65456c2f, type: 3}
+  headWidthInCells: 1
+  headHeightInCells: 1
+  bodyPhases:
+  - {fileID: 21300000, guid: 9ca9a3527b8c4531b85bea9f32c59572, type: 3}
+  - {fileID: 21300000, guid: 2beeb10dc7304b588c63f77ecaa6a9f4, type: 3}
+  - {fileID: 21300000, guid: 22e7e2d8a2eb43cf9165ac50271c5f15, type: 3}
+  - {fileID: 21300000, guid: 50f3ec630d18438d8f134f0685c54ccb, type: 3}
+  - {fileID: 21300000, guid: 61e50bbca13d404aadceca76d2062d18, type: 3}
+  - {fileID: 21300000, guid: b4ddd4f90d434d35a6b8147e1c936743, type: 3}
+  - {fileID: 21300000, guid: 03ae940b854443fcb9b72eddb6082c4a, type: 3}
+  - {fileID: 21300000, guid: 97f52ec40b8341fc8e897afde6d213fa, type: 3}
+  cornerPhases:
+  - {fileID: 21300000, guid: fe5be6db6a5f42a3885622ee5abd9059, type: 3}
+  - {fileID: 21300000, guid: f62bc397758c42599593d5047a987427, type: 3}
+  - {fileID: 21300000, guid: 93edd7a3bb2543c58253976832d3a25e, type: 3}
+  - {fileID: 21300000, guid: f3b201460ef648a0b4d5c4cc710a5bb5, type: 3}
+  - {fileID: 21300000, guid: c6b378c29717472eb22a0a07f4754233, type: 3}
+  - {fileID: 21300000, guid: f6a32240c99e425fab5aefd852c0e7a5, type: 3}
+  - {fileID: 21300000, guid: 55a1894e5af24d22b64fbc8027d576ef, type: 3}
+  - {fileID: 21300000, guid: 99a90e60c4d84b4b9ffd6e68e9d4190b, type: 3}
+  cornerOutsidePhases:
+  - {fileID: 21300000, guid: c3d8b90853324155b99ddafc9f911b53, type: 3}
+  - {fileID: 21300000, guid: e10422a370514811869a50f98d02c310, type: 3}
+  - {fileID: 21300000, guid: 06a11808a33f4e97a6d888f15a5f154d, type: 3}
+  - {fileID: 21300000, guid: ce48ecdcb39c49aa86f3bd81587f808b, type: 3}
+  - {fileID: 21300000, guid: dde1f206864c4c05a482295fd47ca2ca, type: 3}
+  - {fileID: 21300000, guid: a2c84d613fad48c6ac99834084c97143, type: 3}
+  - {fileID: 21300000, guid: dbd037669e844ad2affcdb298d3877b0, type: 3}
+  - {fileID: 21300000, guid: e8b502ed3b7e4bd6bce8ee20c938cecb, type: 3}
+  tailPhases:
+  - {fileID: 21300000, guid: 8d989f0dc44646648168cb9c11fcfe35, type: 3}
+  - {fileID: 21300000, guid: ee9cd75151c24667bbf3e3f3fa1e0c93, type: 3}
+  - {fileID: 21300000, guid: 3f70440e6b6d42a0bbf55184c958d359, type: 3}
+  - {fileID: 21300000, guid: d64e58ba3afc433f875e13f8bc0266e7, type: 3}
+  - {fileID: 21300000, guid: 482c5918c1284384a00383e86aec9fa5, type: 3}
+  - {fileID: 21300000, guid: 2af6c0d568a24fb5ad022835976b0a73, type: 3}
+  - {fileID: 21300000, guid: 4784da422a01451da5e37bc8ad3bd340, type: 3}
+  - {fileID: 21300000, guid: 82130f8394444b148a25051b4f7360ae, type: 3}
+  useSpineHead: 1
+  spineSkinName: skin_bear
+  skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: e35562913a034304937408eac5ee6d61, type: 3}

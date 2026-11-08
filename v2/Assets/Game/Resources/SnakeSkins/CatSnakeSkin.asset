@@ -24,3 +24,4 @@ MonoBehaviour:
   useSpineHead: 1
   spineSkinName: skin_cat
   skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: 77e7caa35a9e4df5ac55390568040aa1, type: 3}

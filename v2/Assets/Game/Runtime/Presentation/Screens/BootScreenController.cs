@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using SnakeApple.Infrastructure.Levels;
+using SnakeApple.Infrastructure.Save;
 using SnakeApple.Presentation.Navigation;
 using SnakeApple.Presentation.UI;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace SnakeApple.Presentation.Screens
         private Button retryButton;
         private RectTransform mainLogo;
         private RectTransform appleMascot;
+        private Vector2 appleMascotBase;
         private bool loading;
 
         private void Awake()
@@ -32,6 +34,7 @@ namespace SnakeApple.Presentation.Screens
             mainLogo = UiLookup.FindOptional<RectTransform>(transform, "MainLogo") 
                     ?? UiLookup.FindOptional<RectTransform>(transform, "WormLogo");
             appleMascot = UiLookup.FindOptional<RectTransform>(transform, "AppleMascot");
+            if (appleMascot != null) appleMascotBase = appleMascot.anchoredPosition;
             retryButton.onClick.AddListener(BeginLoad);
             retryButton.gameObject.SetActive(false);
         }
@@ -49,7 +52,7 @@ namespace SnakeApple.Presentation.Screens
             if (appleMascot != null)
             {
                 var yOffset = Mathf.Sin(Time.unscaledTime * 3.2f) * 7f;
-                appleMascot.anchoredPosition = new Vector2(0f, -150f + yOffset);
+                appleMascot.anchoredPosition = appleMascotBase + new Vector2(0f, yOffset);
             }
         }
 
@@ -58,22 +61,39 @@ namespace SnakeApple.Presentation.Screens
             if (!loading) StartCoroutine(LoadRoutine());
         }
 
+        private static readonly string[] RequiredModes = { "normal", "hard", "challenge" };
+
         private IEnumerator LoadRoutine()
         {
             loading = true;
             retryButton.gameObject.SetActive(false);
             progress.fillAmount = 0.05f;
+
+            // Stage 1: local profile and settings. A broken save must never block the game.
+            status.text = "Loading your profile...";
+            yield return AnimateProgress(0.3f, 0.12f);
+            try
+            {
+                LoadProfile();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"[Snake Apple V2] Profile could not be read, using defaults: {exception.Message}");
+            }
+
+            // Stage 2: level catalog. This one is required to play.
             status.text = "Loading level catalog...";
-
-            yield return AnimateProgress(0.35f, 0.25f);
-
+            yield return AnimateProgress(0.7f, 0.12f);
             try
             {
                 LegacyLevelCatalogLoader.ClearCache();
                 var catalog = LegacyLevelCatalogLoader.Load();
-                if (catalog.Count("normal") != 180 || catalog.Count("hard") != 50 || catalog.Count("challenge") != 54)
+                foreach (var mode in RequiredModes)
                 {
-                    throw new InvalidOperationException("The level catalog is incomplete.");
+                    if (catalog.Count(mode) <= 0)
+                    {
+                        throw new InvalidOperationException($"The level catalog has no '{mode}' levels.");
+                    }
                 }
             }
             catch (Exception exception)
@@ -86,12 +106,22 @@ namespace SnakeApple.Presentation.Screens
                 yield break;
             }
 
-            status.text = "Preparing your adventure...";
-            yield return AnimateProgress(0.85f, 0.25f);
-            yield return AnimateProgress(1.0f, 0.20f);
-            yield return new WaitForSecondsRealtime(0.12f);
+            status.text = "Ready!";
+            yield return AnimateProgress(1.0f, 0.12f);
+            yield return new WaitForSecondsRealtime(0.08f);
 
             navigator.Load(ScreenNames.Home);
+        }
+
+        private static void LoadProfile()
+        {
+            // Touch each value once so bad data surfaces here instead of inside a later screen.
+            _ = LocalProfileStore.Coins;
+            _ = LocalProfileStore.SelectedSkin;
+            _ = LocalProfileStore.Music;
+            _ = LocalProfileStore.Sfx;
+            _ = LocalProfileStore.Haptics;
+            _ = LocalProfileStore.ReducedMotion;
         }
 
         private IEnumerator AnimateProgress(float target, float duration)

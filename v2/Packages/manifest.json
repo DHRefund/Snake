@@ -4,8 +4,17 @@
     "com.unity.test-framework": "1.4.6",
     "com.unity.ugui": "2.0.0",
     "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.audio": "1.0.0",
     "com.unity.modules.physics": "1.0.0",
-    "com.unity.modules.physics2d": "1.0.0"
-  }
+    "com.unity.modules.physics2d": "1.0.0",
+    "com.google.ads.mobile": "11.5.0"
+  },
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": ["com.google.ads.mobile", "com.google.external-dependency-manager"]
+    }
+  ]
 }
 

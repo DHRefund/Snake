@@ -72,7 +72,7 @@ cập nhật cả tài liệu nguồn và test liên quan.
 | FR-MON-005 | Frequency cap | Interstitial cách nhau tối thiểu 3 completed level và 120 giây |
 | FR-MON-006 | SDK failure isolation | Offline, timeout, load/show failure hoặc callback lặp không khóa input, audio, navigation hay progression |
 | FR-MON-007 | Build safety | Development dùng test ads; Release validation từ chối sample/rỗng/sai-environment ad unit ID |
-| FR-MON-008 | Format scope | Release chỉ bật Rewarded và Interstitial; Banner/App Open/Native/Rewarded Interstitial bị tắt |
+| FR-MON-008 | Format scope | Release bật Banner adaptive ở đáy Gameplay, Rewarded và Interstitial; App Open/Native/Rewarded Interstitial bị tắt |
 
 ## 6. Non-functional requirements
 

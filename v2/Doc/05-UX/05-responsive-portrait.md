@@ -21,12 +21,19 @@
 │                        │
 ├────────────────────────┤
 │ Actions / D-pad        │
+│ Khoảng cách 16 dp      │
+├────────────────────────┤
+│ Adaptive Banner        │
 │ Safe area bottom       │
 └────────────────────────┘
 ```
 
 HUD trên và dưới có kích thước ổn định theo canvas. Board nhận phần linh hoạt và
 fit theo cạnh giới hạn nhỏ hơn. Không phóng tile vượt card và không crop board.
+
+Gameplay dành riêng vùng banner ở đáy safe area. Chiều cao được cập nhật theo SDK,
+không tính gộp vào vùng nhận swipe hoặc nút D-pad. Editor dùng khung TEST BANNER.
+Ẩn banner trong các modal, giữ vùng dành sẵn để bố cục không nhảy. Các màn khác chưa dùng banner.
 
 ## 3. Aspect ratio matrix
 

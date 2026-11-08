@@ -31,6 +31,48 @@ namespace SnakeApple.Infrastructure.Save
             }
         }
 
+        public static int SelectedBlockTheme
+        {
+            get => PlayerPrefs.GetInt("profile.cosmetics.blockTheme", 0);
+            set
+            {
+                PlayerPrefs.SetInt("profile.cosmetics.blockTheme", Mathf.Max(0, value));
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static int SelectedBackground
+        {
+            get => PlayerPrefs.GetInt("profile.cosmetics.background", 0);
+            set
+            {
+                PlayerPrefs.SetInt("profile.cosmetics.background", Mathf.Max(0, value));
+                PlayerPrefs.Save();
+            }
+        }
+
+        public static bool IsBlockThemeUnlocked(int index)
+        {
+            return index == 0 || PlayerPrefs.GetInt($"profile.cosmetics.blockTheme.{index}.unlocked", 0) == 1;
+        }
+
+        public static void UnlockBlockTheme(int index)
+        {
+            PlayerPrefs.SetInt($"profile.cosmetics.blockTheme.{index}.unlocked", 1);
+            PlayerPrefs.Save();
+        }
+
+        public static bool IsBackgroundUnlocked(int index)
+        {
+            return index == 0 || PlayerPrefs.GetInt($"profile.cosmetics.background.{index}.unlocked", 0) == 1;
+        }
+
+        public static void UnlockBackground(int index)
+        {
+            PlayerPrefs.SetInt($"profile.cosmetics.background.{index}.unlocked", 1);
+            PlayerPrefs.Save();
+        }
+
         public static bool Music
         {
             get => GetBool(MusicKey, true);

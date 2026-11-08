@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd1408b0df40d7ad9cddc0d5784f26, type: 3}
+  m_Name: Skin_unicorn
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSpriteSkin
+  head: {fileID: 21300000, guid: a7f4ca8816974823afe553b1b8793b56, type: 3}
+  headWidthInCells: 1
+  headHeightInCells: 1
+  bodyPhases:
+  - {fileID: 21300000, guid: f5da95bb26014f72baaea8048324337b, type: 3}
+  - {fileID: 21300000, guid: 5a04284e3444412b924d736e0ef25835, type: 3}
+  - {fileID: 21300000, guid: 305fccc2a77447db99d46d620ce90c25, type: 3}
+  - {fileID: 21300000, guid: f7b026d959004d788847dac374656bac, type: 3}
+  - {fileID: 21300000, guid: 02cde5bdf7d84adbb574ca59311928a9, type: 3}
+  - {fileID: 21300000, guid: f8a0f9cd3f994108b9f9319a3d385bd3, type: 3}
+  - {fileID: 21300000, guid: 1dd2d089aaeb4e4099c6434add7a581b, type: 3}
+  - {fileID: 21300000, guid: 3dcb7ccd31da4f48ab0cbdf808b5c5d7, type: 3}
+  cornerPhases:
+  - {fileID: 21300000, guid: e916c4b3286a4ea597b98429f2d33fef, type: 3}
+  - {fileID: 21300000, guid: af2268fa123046ecb00646f4351c8f92, type: 3}
+  - {fileID: 21300000, guid: af71f21cdb5947eaa58f7267ff963efe, type: 3}
+  - {fileID: 21300000, guid: 9eb3db4a112a40d58f0136902a8f23c7, type: 3}
+  - {fileID: 21300000, guid: 7df563331f034908a56259ac6049a497, type: 3}
+  - {fileID: 21300000, guid: adf3ddaece05416a8da4e1bc3e6c6746, type: 3}
+  - {fileID: 21300000, guid: da9fe7531b2e424a9860f3b3ab02f2a5, type: 3}
+  - {fileID: 21300000, guid: 6179ceebdcb94493ae720e6ef5b03a20, type: 3}
+  cornerOutsidePhases:
+  - {fileID: 21300000, guid: b81a27a3c7d642ca92b0eb1602267e94, type: 3}
+  - {fileID: 21300000, guid: 81edaf32d515436185bd8d7d5d3f1efd, type: 3}
+  - {fileID: 21300000, guid: 102bb92b316d4641b815bf90e114d3ba, type: 3}
+  - {fileID: 21300000, guid: 7f8d8cdfed8247b19dc4166d01c121ae, type: 3}
+  - {fileID: 21300000, guid: 905d27f3d973402a972a4d6c790310b0, type: 3}
+  - {fileID: 21300000, guid: 1f8c2d013bcd4faa8e394b95a341b446, type: 3}
+  - {fileID: 21300000, guid: cc4843a900544702be3e3f8558f1c592, type: 3}
+  - {fileID: 21300000, guid: 96d7f3a8a31d4f55a3430fa6c4c577d5, type: 3}
+  tailPhases:
+  - {fileID: 21300000, guid: 79c9e7c800a8438c9ef64c744d6d8d95, type: 3}
+  - {fileID: 21300000, guid: a6d4be43f9264112b6c76fab7941a3fd, type: 3}
+  - {fileID: 21300000, guid: e6423bacd583463eaac918dad1a294d1, type: 3}
+  - {fileID: 21300000, guid: d61efe291e45439dafb1ad45e2ce37f4, type: 3}
+  - {fileID: 21300000, guid: af6d6bf7b938453e8b0676f294c56248, type: 3}
+  - {fileID: 21300000, guid: 5f2f5ea64acf486e94ed2c115456e8e4, type: 3}
+  - {fileID: 21300000, guid: e361c46e80ee410b8c691d5956f53fcf, type: 3}
+  - {fileID: 21300000, guid: 0fbc1be3f096494cb37a2e56f1ea3a34, type: 3}
+  useSpineHead: 1
+  spineSkinName: skin_unicorn
+  skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: 2c548d6c671d4cc387521accc17408ee, type: 3}

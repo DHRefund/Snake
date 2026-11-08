@@ -8,8 +8,8 @@
 - Target thương mại đầu tiên là Android.
 - Nhà cung cấp quảng cáo đầu tiên là Google AdMob qua Google Mobile Ads Unity Plugin.
 - Consent dùng Google User Messaging Platform (UMP).
-- Release đầu tiên dùng đúng hai format: Rewarded và Interstitial.
-- Không dùng Banner, App Open, Native hoặc Rewarded Interstitial.
+- Release đầu tiên dùng Banner adaptive, Rewarded và Interstitial.
+- Không dùng App Open, Native hoặc Rewarded Interstitial.
 - Không chép các DLL quảng cáo trích từ APK vào V2; cài package chính thức với version được pin.
 - Gameplay hoạt động đầy đủ khi mất mạng, người dùng không consent hoặc Ads SDK lỗi.
 - Không quảng cáo nào thay đổi luật puzzle, mở level chính, cấp Hint hay cấp Undo.
@@ -18,6 +18,16 @@ Việc chọn AdMob là quyết định adapter, không làm Application/UI ph�
 thay nhà cung cấp sau này bằng adapter khác mà không đổi Core Simulation.
 
 ## 2. Placement chính thức
+
+### 2.0 Banner Gameplay
+
+- Chỉ đặt Banner ở đáy màn Gameplay portrait, nằm trong safe area và có khoảng cách 16 dp với vùng điều khiển.
+- Dùng anchored adaptive theo chiều rộng an toàn và chiều cao SDK trả về. Layout dành vùng riêng ngay từ lúc tải quảng cáo.
+- Khi mở modal Pause/Settings/Confirm/Win/Lose hoặc rời Gameplay, ẩn hoặc hủy banner. Giữ vùng bố cục khi đang ở Gameplay để tránh nhảy board và nút.
+- Banner lỗi không chặn gameplay; thử lại sau 30 giây. Thay đổi kích thước hoặc safe area tạo lại banner phù hợp.
+- Hiện tại tích hợp Google Mobile Ads Unity 11.5.0 qua OpenUPM, sử dụng sample App ID và adaptive Banner Ad Unit ID chính thức cho Android/iOS. Đây là cấu hình thử nghiệm, chưa tạo doanh thu.
+- Editor hiển thị khung `TEST BANNER` để duyệt layout; quảng cáo SDK cần kiểm tra trên thiết bị Android/iOS.
+- `GameplayBanner` sở hữu vòng đời banner trong scene, `SafeAreaPanel` nhận số pixel cần dành ở đáy. Domain không phụ thuộc SDK.
 
 ### 2.1 Rewarded
 
@@ -30,6 +40,12 @@ Rewarded là hành động hoàn toàn tự nguyện:
 - Không dùng Rewarded cho Hint, Undo, Replay, Continue, Skip hoặc mở level chính.
 - Người chơi đóng ad sớm hoặc ad lỗi thì không nhận coin và quay lại đúng màn hình trước đó.
 - No-ads entitlement trong tương lai không ẩn Rewarded vì đây là lựa chọn chủ động.
+
+Trạng thái triển khai: `RewardedAdController` (Presentation/Ads) và `RewardLedger` (Infrastructure/Save)
+đã có, đang dùng test ad unit của Google. Nút `WATCH AD +50` nằm trên màn Cosmetics; Win screen chưa có.
+Editor mô phỏng một quảng cáo thành công sau 1 giây vì SDK không chạy trong Editor. Cap 24 giờ dùng
+đồng hồ hệ thống UTC nên người chơi chỉnh giờ máy có thể lách; chấp nhận được cho giá trị 50 coin,
+cần server time nếu sau này coin có giá trị tiền thật.
 
 Reward amount và cap nằm trong versioned local config. Remote config có thể giảm tần suất hoặc
 tắt placement, nhưng không được tăng vượt giới hạn release nếu chưa qua QA.
@@ -138,7 +154,7 @@ sung sản phẩm `remove_ads` sau này.
 
 Khi bật `remove_ads`:
 
-- Chỉ tắt Interstitial; Rewarded tự nguyện vẫn còn.
+- Tắt Banner và Interstitial; Rewarded tự nguyện vẫn còn.
 - Giá lấy từ store, UI không hard-code.
 - Purchase pending có UI riêng.
 - Restore purchase khả dụng ở platform yêu cầu.
@@ -194,7 +210,7 @@ Các case bắt buộc:
 - Duplicate reward callback chỉ cộng 50 coin một lần.
 - Close không có reward callback không cấp coin.
 - Kill/pause/resume trong full-screen ad không kẹt input/audio/modal.
-- No-ads chặn Interstitial nhưng không chặn Rewarded tự nguyện.
+- No-ads chặn Banner và Interstitial nhưng không chặn Rewarded tự nguyện.
 - Consent denied vẫn chơi đầy đủ; Privacy options mở lại được khi bắt buộc.
 - Release build không chứa sample test ad unit ID.
 

@@ -2119,9 +2119,9 @@
             "teleportDirections": "",
             "doorInitiallyClosed": [],
             "slideBarsHorizontal": [
-                false
+                true
             ],
-            "solution": "LLLLLLLLUURRRRRRURUURRRUULLLLLLLLUUUUL",
+            "solution": "LLLLLLLLUURRRRRRUURURRURULLLLLLLLUUUUL",
             "sourcePath": "Resources/snakeapple/easy/Level 93.prefab",
             "sourceHash": "6a1418aff4e84155add4b8ee37c50677b484874069f41fd1b9a8f4a1dbb41675"
         },
@@ -2762,7 +2762,7 @@
             "teleportDirections": "",
             "doorInitiallyClosed": [],
             "slideBarsHorizontal": [],
-            "solution": "RRUURRRRRUUULLLULLLDLLLL",
+            "solution": "RRUURRRRRRRDDDLLLL",
             "sourcePath": "Resources/snakeapple/easy/Level 119.prefab",
             "sourceHash": "76e107b071af6f4a0c7e02a5417b9260d6c130697d8261fe8d2d493faae6d2a4"
         },
@@ -4234,7 +4234,7 @@
                 true
             ],
             "slideBarsHorizontal": [],
-            "solution": "",
+            "solution": "RURRURURRURRUUUULLLDLLUULLLDDLLDDDD",
             "sourcePath": "Resources/snakeapple/easy/Level 177.prefab",
             "sourceHash": "1147c6a9e5e75fd4a2238d7992ffcb64b9692ac8d14b21a3f04984e58d6777ff"
         },

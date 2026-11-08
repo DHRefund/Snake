@@ -8,6 +8,14 @@ namespace SnakeApple.Presentation.UI
         private RectTransform rectTransform;
         private Rect lastSafeArea;
         private Vector2Int lastScreenSize;
+        private float bottomReservedPixels;
+
+        public void SetBottomReservedPixels(float pixels)
+        {
+            bottomReservedPixels = Mathf.Max(0f, pixels);
+            if (rectTransform == null) rectTransform = (RectTransform)transform;
+            Apply();
+        }
 
         private void Awake()
         {
@@ -31,6 +39,7 @@ namespace SnakeApple.Presentation.UI
             var safeArea = Screen.safeArea;
             var min = safeArea.position;
             var max = safeArea.position + safeArea.size;
+            min.y = Mathf.Min(max.y, min.y + bottomReservedPixels);
             min.x /= Screen.width;
             min.y /= Screen.height;
             max.x /= Screen.width;

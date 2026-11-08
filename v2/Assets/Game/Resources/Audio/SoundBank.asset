@@ -1,0 +1,132 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2d4f80a1c3e5079b1d2e3f4a5b6c71, type: 3}
+  m_Name: SoundBank
+  m_EditorClassIdentifier:
+  entries:
+  - cue: 0
+    clip: {fileID: 8300000, guid: 794b59814c198fd408104cc85849f86c, type: 3}
+    volume: 0.8
+    pitchJitter: 0.02
+    cooldown: 0.05
+  - cue: 1
+    clip: {fileID: 8300000, guid: 1c950d38d44caa54ea22cefdc93742cf, type: 3}
+    volume: 0.8
+    pitchJitter: 0.02
+    cooldown: 0.05
+  - cue: 2
+    clip: {fileID: 8300000, guid: fb9fdae2a6eff8d4f8f19a94fde9b318, type: 3}
+    volume: 0.6
+    pitchJitter: 0.06
+    cooldown: 0.06
+  - cue: 3
+    clip: {fileID: 8300000, guid: c820803c98d18df40bcce252138d9d53, type: 3}
+    volume: 0.8
+    pitchJitter: 0.03
+    cooldown: 0.12
+  - cue: 4
+    clip: {fileID: 8300000, guid: 3650328c22784fc4387dc57a069c34bb, type: 3}
+    volume: 1
+    pitchJitter: 0.05
+    cooldown: 0.05
+  - cue: 5
+    clip: {fileID: 8300000, guid: 810c3501263d6034290c21979af999cf, type: 3}
+    volume: 0.7
+    pitchJitter: 0
+    cooldown: 0.1
+  - cue: 6
+    clip: {fileID: 8300000, guid: 84153707c5f31264b85d29629302df5a, type: 3}
+    volume: 0.7
+    pitchJitter: 0.05
+    cooldown: 0.1
+  - cue: 7
+    clip: {fileID: 8300000, guid: 0ba7d17bd3607b546b030aa1a8c3a762, type: 3}
+    volume: 0.8
+    pitchJitter: 0
+    cooldown: 0.1
+  - cue: 8
+    clip: {fileID: 8300000, guid: 0e2c174ff9786c945b046bc7c03afd8d, type: 3}
+    volume: 1
+    pitchJitter: 0
+    cooldown: 0.5
+  - cue: 9
+    clip: {fileID: 8300000, guid: 5880016537536424ba33b5fecca4de92, type: 3}
+    volume: 0.8
+    pitchJitter: 0
+    cooldown: 0.5
+  - cue: 10
+    clip: {fileID: 8300000, guid: 0340e0d8a9d59ff4596f8795d8c70017, type: 3}
+    volume: 0.7
+    pitchJitter: 0
+    cooldown: 0.5
+  - cue: 11
+    clip: {fileID: 8300000, guid: 0fb4770b02eb6314c840be6d594e3741, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.5
+  - cue: 12
+    clip: {fileID: 8300000, guid: 6c5da03f0cfe41f45ad73382ac82e2b9, type: 3}
+    volume: 0.7
+    pitchJitter: 0
+    cooldown: 0.5
+  - cue: 13
+    clip: {fileID: 8300000, guid: 6c0cd539e4f38c8448f4b6d344dfa3be, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.3
+  - cue: 14
+    clip: {fileID: 8300000, guid: b1972e752d3774842b8fb525c9e2709e, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.3
+  - cue: 15
+    clip: {fileID: 8300000, guid: 53d3b7697b643d942a278fef09021fd2, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.3
+  - cue: 16
+    clip: {fileID: 8300000, guid: e46ec51bd3518c64fa9b1f27f1551cc2, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.3
+  - cue: 17
+    clip: {fileID: 8300000, guid: c0390a426c70f1d419efb1902609ba91, type: 3}
+    volume: 1
+    pitchJitter: 0
+    cooldown: 0.3
+  - cue: 18
+    clip: {fileID: 8300000, guid: f3d6e298a642da6468d3a48bf6f42644, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.2
+  - cue: 19
+    clip: {fileID: 8300000, guid: 064edd8fd1d79864688daf36110d696e, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.2
+  - cue: 20
+    clip: {fileID: 8300000, guid: 2a347445c29fa6340af724b8a84616b8, type: 3}
+    volume: 0.9
+    pitchJitter: 0
+    cooldown: 0.3
+  - cue: 21
+    clip: {fileID: 8300000, guid: 1c950d38d44caa54ea22cefdc93742cf, type: 3}
+    volume: 0.7
+    pitchJitter: 0.05
+    cooldown: 0.08
+  - cue: 22
+    clip: {fileID: 8300000, guid: 794b59814c198fd408104cc85849f86c, type: 3}
+    volume: 0.8
+    pitchJitter: 0
+    cooldown: 0.2
+  menuMusic: {fileID: 8300000, guid: 1be3dee7d9da32244818ecc1367bbdbe, type: 3}
+  musicVolume: 0.4

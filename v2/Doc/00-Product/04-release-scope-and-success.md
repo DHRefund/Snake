@@ -24,8 +24,9 @@ kiểm thử, bảo trì và thay presentation độc lập.
 ### Luồng sản phẩm
 
 - Boot, Home, Mode Select, Level Select, Gameplay, Pause, Settings, Win và Lose.
-- Cosmetics có 12 skin launch (1 mặc định, 11 mua bằng coin). Trong giai đoạn UI
-  có thể dùng placeholder, nhưng release phải có asset thật cho mọi slot đang bật.
+- Cosmetics có 12 skin rắn launch (1 mặc định, 11 mua bằng coin), cùng block theme và
+  background mua bằng coin (xem `01-Game-Design/04-progression-economy.md` mục 6). Release
+  phải có asset thật cho mọi slot đang bật; slot chưa có asset bị ẩn.
 - Không có nút placeholder, màn hình cụt hoặc chức năng chỉ chạy từ Editor.
 
 ### Presentation tối thiểu để phát hành
@@ -46,7 +47,7 @@ kiểm thử, bảo trì và thay presentation độc lập.
 ## 3. P1 sau release
 
 - IAP `remove_ads`.
-- Thêm skin/theme ngoài 12 skin launch.
+- Thêm skin, block theme hoặc background ngoài danh sách launch.
 - Cloud save, achievement hoặc leaderboard.
 - Daily challenge/live content.
 - Thêm ngôn ngữ sau khi pipeline localization đã ổn định.

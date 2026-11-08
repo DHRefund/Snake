@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66d01ae1fa5f2e540b30b86e70d1b57f, type: 3}
+  m_Name: ThemeCatalog
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Cosmetics.ThemeCatalog
+  blockThemes:
+  - id: ice
+    displayName: Frosty Ice
+    price: 0
+    skin: {fileID: 11400000, guid: b36bdf66bdb84bd7a21fb0b72d903a07, type: 2}
+    preview: {fileID: 21300000, guid: ffbd1cb047657e04eaae51b027c42a53, type: 3}
+  - id: desert
+    displayName: Sandstone
+    price: 200
+    skin: {fileID: 0}
+    preview: {fileID: 0}
+  - id: forest
+    displayName: Mossy Wood
+    price: 300
+    skin: {fileID: 0}
+    preview: {fileID: 0}
+  - id: lava
+    displayName: Volcano
+    price: 400
+    skin: {fileID: 0}
+    preview: {fileID: 0}
+  - id: candy
+    displayName: Candy Land
+    price: 500
+    skin: {fileID: 0}
+    preview: {fileID: 0}
+  - id: night
+    displayName: Midnight
+    price: 600
+    skin: {fileID: 0}
+    preview: {fileID: 0}
+  backgrounds:
+  - id: iceberg
+    displayName: Iceberg
+    price: 0
+    art: {fileID: 21300000, guid: ea4c5a15387f4596b70a201a3dc08ca6, type: 3}
+  - id: desert
+    displayName: Desert Day
+    price: 150
+    art: {fileID: 21300000, guid: 4bd32474eb9a4097878efc1fba47d84e, type: 3}
+  - id: clouds
+    displayName: Sky Clouds
+    price: 250
+    art: {fileID: 21300000, guid: 433cbdd24f984187bd0abb24288e8c50, type: 3}

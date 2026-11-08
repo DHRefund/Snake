@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd1408b0df40d7ad9cddc0d5784f26, type: 3}
+  m_Name: Skin_dragon
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSpriteSkin
+  head: {fileID: 21300000, guid: 6e7eb900168648a9a04ec113d38a68c8, type: 3}
+  headWidthInCells: 1
+  headHeightInCells: 1
+  bodyPhases:
+  - {fileID: 21300000, guid: 1a3f6e8f0dec4c2aad5b05ed4c0f252a, type: 3}
+  - {fileID: 21300000, guid: db7cb560f30b421aaf6be1f7bbeb4eb1, type: 3}
+  - {fileID: 21300000, guid: deeed070ead8416cad267afd74b16bee, type: 3}
+  - {fileID: 21300000, guid: fab145b16eb9491ca2a446806fe93a4f, type: 3}
+  - {fileID: 21300000, guid: bbca76d3a8424bde9d48d517aa200bbb, type: 3}
+  - {fileID: 21300000, guid: fbbe55254ebd432386ccab7f7dd54fd8, type: 3}
+  - {fileID: 21300000, guid: 7b244508d33944eeb402ad72a8d09179, type: 3}
+  - {fileID: 21300000, guid: 0734e95784fe4e54b1dbf77e870ed675, type: 3}
+  cornerPhases:
+  - {fileID: 21300000, guid: a5b94bbc944841108686a2ae758043da, type: 3}
+  - {fileID: 21300000, guid: 3ebd8b89e49049fd8b002e08fc5325d7, type: 3}
+  - {fileID: 21300000, guid: 4a0681e026414533a40599369143190e, type: 3}
+  - {fileID: 21300000, guid: 3b215cd5a5a14c58a76bc12fc75476ef, type: 3}
+  - {fileID: 21300000, guid: dbf3bf7d05374df6866b27b55e4f85c4, type: 3}
+  - {fileID: 21300000, guid: f7855b69956741e2a6bb5bf4d90c0c06, type: 3}
+  - {fileID: 21300000, guid: eb3e1afdb10c4413a6a866d93513475d, type: 3}
+  - {fileID: 21300000, guid: e7b4d3abe9804a16b9a46af7e0d31a52, type: 3}
+  cornerOutsidePhases:
+  - {fileID: 21300000, guid: 827607d631554cd5b5f153344bf5b7c3, type: 3}
+  - {fileID: 21300000, guid: bad6b8cea0854b44a8f561d8d882e72f, type: 3}
+  - {fileID: 21300000, guid: db9c78ada12e42399345c2b3d64aa741, type: 3}
+  - {fileID: 21300000, guid: 73e37bd34136489893e0434e45b3f0fd, type: 3}
+  - {fileID: 21300000, guid: 704b5c15ceaf4db28869a103373ba022, type: 3}
+  - {fileID: 21300000, guid: 8546f729fd2f464192746394ed641e4e, type: 3}
+  - {fileID: 21300000, guid: a2aef0d0658c479181a9bc910e528342, type: 3}
+  - {fileID: 21300000, guid: bf217e94bba84b8385f1664bb2bc6870, type: 3}
+  tailPhases:
+  - {fileID: 21300000, guid: bfcec375dfbb4ea98cf5a96dd6e06001, type: 3}
+  - {fileID: 21300000, guid: d598e104aa344437bcebf75c414c9573, type: 3}
+  - {fileID: 21300000, guid: d36f23fe6a9d4cf782686c54b6c1b5d6, type: 3}
+  - {fileID: 21300000, guid: 4257ab3be12c49d096a8edc32bcbff99, type: 3}
+  - {fileID: 21300000, guid: e19db4e5e4c34e30b960d338b88e8cb1, type: 3}
+  - {fileID: 21300000, guid: dc7eb4e66c1843c8bb507335cc767b1c, type: 3}
+  - {fileID: 21300000, guid: d7d65866369a4e5ea06716c9d1421598, type: 3}
+  - {fileID: 21300000, guid: 7cbc60177a4148ce85451f2fbf0a4431, type: 3}
+  useSpineHead: 1
+  spineSkinName: skin_dragon
+  skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: a6d6f7dd3db842b9857e0216f1b05c69, type: 3}

@@ -7,8 +7,11 @@ using SnakeApple.Domain.Entities;
 using SnakeApple.Domain.Rules;
 using SnakeApple.Infrastructure.Levels;
 using SnakeApple.Infrastructure.Save;
+using SnakeApple.Presentation.Ads;
+using SnakeApple.Presentation.Audio;
 using SnakeApple.Presentation.Navigation;
 using SnakeApple.Presentation.Blocks;
+using SnakeApple.Presentation.Cosmetics;
 using SnakeApple.Presentation.Items;
 using SnakeApple.Presentation.Snake;
 using SnakeApple.Presentation.UI;
@@ -23,6 +26,8 @@ namespace SnakeApple.Presentation.Screens
         private const string DefaultSnakeSkinResource = "SnakeSkins/LegacyV1SnakeSkin";
         private const string DefaultAutotileBlockSkinResource = "BlockSkins/IceBlockSkin";
         private const string DefaultBlockSkinResource = "BlockSkins/LegacyDefaultBlockSkin";
+        // Items sit slightly above the tile centre so they line up with the blocks' raised top faces.
+        private const float ItemLift = 0.08f;
         private const string DefaultItemSkinResource = "ItemSkins/DefaultItemSkin";
         private static readonly Color FloorColor = Color.clear;
         private static readonly Color WallColor = new Color32(72, 89, 91, 255);
@@ -44,6 +49,13 @@ namespace SnakeApple.Presentation.Screens
         private readonly Dictionary<GridPos, Image> cellImages = new Dictionary<GridPos, Image>();
         private readonly Dictionary<GridPos, Text> cellLabels = new Dictionary<GridPos, Text>();
         private readonly Dictionary<GridPos, RectTransform> cellRects = new Dictionary<GridPos, RectTransform>();
+        private readonly Dictionary<GridPos, BoardAppleView> appleViews = new Dictionary<GridPos, BoardAppleView>();
+        private readonly Dictionary<GridPos, RectTransform> itemVisuals = new Dictionary<GridPos, RectTransform>();
+        private RectTransform itemOverlay;
+        private RectTransform portalFrontOverlay;
+        // Teleporter cell -> side of the cell the hidden pocket is on (-1 left, +1 right). Used to clip the snake.
+        private readonly Dictionary<GridPos, float> portalSides = new Dictionary<GridPos, float>();
+        private readonly Dictionary<GridPos, RectTransform> portalFronts = new Dictionary<GridPos, RectTransform>();
         private readonly List<Direction> acceptedMoves = new List<Direction>();
 
         [Header("Legacy V1 snake demo")]
@@ -66,8 +78,13 @@ namespace SnakeApple.Presentation.Screens
         private Text levelText;
         private Text appleText;
         private Text appleIconText;
+        private ExitStatusView exitStatus;
         private Text feedbackText;
         private Text winRewardText;
+        private Button winWatchAdButton;
+        private Text winWatchAdLabel;
+        private RewardedAdController rewardedAd;
+        private bool winAdInProgress;
         private Text loseSubtitleText;
         private GameObject pauseOverlay;
         private GameObject pauseSettingsOverlay;
@@ -86,15 +103,19 @@ namespace SnakeApple.Presentation.Screens
 
         private void Awake()
         {
+            if (GetComponent<GameplayBanner>() == null) gameObject.AddComponent<GameplayBanner>();
             EnsureSnakeSkin();
             EnsureBlockSkin();
             EnsureItemSkin();
+            ApplySelectedBackground();
             navigator = GetComponent<ScreenNavigator>();
             boardGrid = UiLookup.Find<RectTransform>(transform, "BoardGrid");
             snakeOverlay = UiLookup.Find<RectTransform>(transform, "SnakeOverlay");
+            EnsureItemOverlay();
             levelText = UiLookup.Find<Text>(transform, "LevelText");
             appleText = UiLookup.Find<Text>(transform, "AppleText");
             appleIconText = UiLookup.Find<Text>(transform, "AppleIcon");
+            exitStatus = GetComponentInChildren<ExitStatusView>(true);
             feedbackText = UiLookup.Find<Text>(transform, "FeedbackText");
             pauseOverlay = UiLookup.FindObject(transform, "PauseOverlay");
             pauseSettingsOverlay = UiLookup.FindObject(transform, "PauseSettingsOverlay");
@@ -124,6 +145,11 @@ namespace SnakeApple.Presentation.Screens
             BindButton("WinNextButton", NextLevel);
             BindButton("WinLevelsButton", () => navigator.Load(ScreenNames.LevelSelect));
             BindButton("WinHomeButton", () => navigator.Load(ScreenNames.Home));
+            winWatchAdButton = UiLookup.Find<Button>(transform, "WinWatchAdButton");
+            winWatchAdLabel = winWatchAdButton.GetComponentInChildren<Text>();
+            winWatchAdButton.onClick.AddListener(WatchAdFromWin);
+            rewardedAd = GetComponent<RewardedAdController>();
+            if (rewardedAd == null) rewardedAd = gameObject.AddComponent<RewardedAdController>();
             BindButton("LoseUndoButton", UndoFromLose);
             BindButton("LoseRestartButton", RestartFromLose);
             BindButton("LoseHomeButton", () => navigator.Load(ScreenNames.Home));
@@ -150,6 +176,21 @@ namespace SnakeApple.Presentation.Screens
             EnsureItemSkin();
         }
 
+        private void ApplySelectedBackground()
+        {
+            var themes = ThemeCatalog.Load();
+            var selected = LocalProfileStore.SelectedBackground;
+            var background = themes != null ? themes.FindBackground(selected) : null;
+            if (background == null || !background.IsAvailable || !LocalProfileStore.IsBackgroundUnlocked(selected)) return;
+
+            var art = UiLookup.FindOptional<Image>(transform, "BackgroundArt");
+            if (art == null) return;
+            art.sprite = background.art;
+            var fitter = art.GetComponent<AspectRatioFitter>();
+            if (fitter != null) fitter.aspectRatio = background.art.rect.width / background.art.rect.height;
+            art.rectTransform.sizeDelta = new Vector2(background.art.rect.width, background.art.rect.height);
+        }
+
         private void EnsureItemSkin()
         {
             if (itemSkin != null && itemSkin.IsConfigured) return;
@@ -164,11 +205,14 @@ namespace SnakeApple.Presentation.Screens
         private void EnsureSnakeSkin()
         {
             var selectedSkin = LocalProfileStore.SelectedSkin;
-            var resourcePath = selectedSkin == 1 
-                ? "SnakeSkins/LegacyV1SnakeSkin" 
-                : "SnakeSkins/CatSnakeSkin";
+            var catalog = SnakeSkinCatalog.Load();
+            var loadedSkin = catalog != null ? catalog.SkinAt(selectedSkin) : null;
+            if (loadedSkin == null)
+            {
+                // Saved index no longer exists (or catalog missing): fall back to the first catalog skin.
+                loadedSkin = catalog != null ? catalog.SkinAt(0) : null;
+            }
 
-            var loadedSkin = Resources.Load<SnakeSpriteSkin>(resourcePath);
             if (loadedSkin != null && loadedSkin.IsConfigured)
             {
                 legacySnakeSkin = loadedSkin;
@@ -192,6 +236,14 @@ namespace SnakeApple.Presentation.Screens
 
         private void EnsureBlockSkin()
         {
+            var themes = ThemeCatalog.Load();
+            var selectedTheme = LocalProfileStore.SelectedBlockTheme;
+            var theme = themes != null ? themes.FindBlock(selectedTheme) : null;
+            if (theme != null && theme.IsAvailable && LocalProfileStore.IsBlockThemeUnlocked(selectedTheme))
+            {
+                autotileBlockSkin = theme.skin;
+            }
+
             if (autotileBlockSkin == null || !autotileBlockSkin.IsConfigured)
             {
                 autotileBlockSkin = Resources.Load<AutotileBlockSkin>(DefaultAutotileBlockSkinResource);
@@ -215,10 +267,32 @@ namespace SnakeApple.Presentation.Screens
         private void Start()
         {
             LoadSelectedLevel();
+            AudioManager.RescanWidgets();
+        }
+
+        private void WatchAdFromWin()
+        {
+            if (winAdInProgress) return;
+            winAdInProgress = rewardedAd.TryShow(committed =>
+            {
+                winAdInProgress = false;
+                winRewardText.text = committed
+                    ? $"+{RewardLedger.RewardCoins} BONUS COINS!"
+                    : "NO REWARD THIS TIME";
+            });
+        }
+
+        private void RefreshWinAdButton()
+        {
+            var remaining = RewardLedger.RemainingGrants(RewardLedger.NowUnix);
+            winWatchAdButton.gameObject.SetActive(remaining > 0);
+            winWatchAdLabel.text = winAdInProgress ? "WATCHING..." : $"WATCH AD  +{RewardLedger.RewardCoins}";
+            winWatchAdButton.interactable = !winAdInProgress && rewardedAd.IsReady;
         }
 
         private void Update()
         {
+            if (winOverlay.activeSelf) RefreshWinAdButton();
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 HandleBack();
@@ -282,6 +356,7 @@ namespace SnakeApple.Presentation.Screens
                 Destroy(child);
             }
 
+            ClearAppleViews();
             cellImages.Clear();
             cellLabels.Clear();
             cellRects.Clear();
@@ -417,6 +492,8 @@ namespace SnakeApple.Presentation.Screens
                 PaintStaticCell(state, pos);
             }
 
+            SyncAppleViews(state);
+
             foreach (var platform in state.SlidePlatforms)
             {
                 SetCellSprite(platform.Current, itemSkin != null ? itemSkin.SlidePlatform : null, Color.white, "BAR");
@@ -436,9 +513,106 @@ namespace SnakeApple.Presentation.Screens
 
             appleIconText.text = IsChallengeMode() ? "◇" : "●";
             appleText.text = IsChallengeMode() ? "EXIT" : state.RemainingApples.ToString();
+            if (exitStatus != null) exitStatus.Apply(state.RemainingApples, IsChallengeMode());
             undoButton.interactable = session.CanUndo;
             loseUndoButton.interactable = session.CanUndo;
             feedbackText.text = feedback;
+        }
+
+        // Apples are drawn in their own overlay (above walls, below the snake) because wall sprites spill into
+        // the neighbouring cells and would otherwise cover them.
+        private void EnsureItemOverlay()
+        {
+            if (itemOverlay != null) return;
+            var node = new GameObject("ItemOverlay", typeof(RectTransform));
+            itemOverlay = (RectTransform)node.transform;
+            itemOverlay.SetParent(boardGrid.parent, false);
+            itemOverlay.anchorMin = snakeOverlay.anchorMin;
+            itemOverlay.anchorMax = snakeOverlay.anchorMax;
+            itemOverlay.pivot = snakeOverlay.pivot;
+            itemOverlay.anchoredPosition = snakeOverlay.anchoredPosition;
+            itemOverlay.sizeDelta = snakeOverlay.sizeDelta;
+            itemOverlay.SetSiblingIndex(boardGrid.GetSiblingIndex() + 1);
+
+            // Teleporter rims are drawn in front of the snake so the body looks like it passes through the gate.
+            var front = new GameObject("PortalFrontOverlay", typeof(RectTransform));
+            portalFrontOverlay = (RectTransform)front.transform;
+            portalFrontOverlay.SetParent(snakeOverlay.parent, false);
+            portalFrontOverlay.anchorMin = snakeOverlay.anchorMin;
+            portalFrontOverlay.anchorMax = snakeOverlay.anchorMax;
+            portalFrontOverlay.pivot = snakeOverlay.pivot;
+            portalFrontOverlay.anchoredPosition = snakeOverlay.anchoredPosition;
+            portalFrontOverlay.sizeDelta = snakeOverlay.sizeDelta;
+            portalFrontOverlay.SetSiblingIndex(snakeOverlay.GetSiblingIndex() + 1);
+        }
+
+        private void PaintApple(PuzzleState state, GridPos position, bool vip)
+        {
+            var sprite = itemSkin != null ? (vip ? itemSkin.AppleVip : itemSkin.AppleNormal) : null;
+            if (sprite == null || itemOverlay == null)
+            {
+                SetCellSprite(position, sprite, Color.white, vip ? "VIP" : "APPLE");
+                return;
+            }
+
+            SetCell(position, Color.clear, string.Empty);
+            if (!cellRects.TryGetValue(position, out var cellRect)) return;
+
+            if (!appleViews.TryGetValue(position, out var view) || view == null)
+            {
+                view = BoardAppleView.Create(itemOverlay, position.X * 31 + position.Y * 17, sprite, vip, itemSkin);
+                appleViews[position] = view;
+                view.PlayAppear();
+            }
+
+            var restsOnWall = IsWallAt(state, new GridPos(position.X, position.Y - 1));
+            var wallOnRight = IsWallAt(state, new GridPos(position.X + 1, position.Y));
+            view.Place(itemOverlay.InverseTransformPoint(cellRect.position), GetCellSize(), restsOnWall, wallOnRight);
+        }
+
+        // An apple that is no longer in the state was eaten: play its pop effect instead of vanishing.
+        private void SyncAppleViews(PuzzleState state)
+        {
+            List<GridPos> eaten = null;
+            foreach (var pair in appleViews)
+            {
+                var cell = state.CellAt(pair.Key);
+                if (cell == '2' || cell == '8') continue;
+                if (eaten == null) eaten = new List<GridPos>();
+                eaten.Add(pair.Key);
+            }
+
+            if (eaten == null) return;
+            foreach (var position in eaten)
+            {
+                if (appleViews[position] != null) appleViews[position].PlayEat();
+                appleViews.Remove(position);
+            }
+        }
+
+        private void ClearAppleViews()
+        {
+            foreach (var view in appleViews.Values)
+            {
+                if (view != null) Destroy(view.gameObject);
+            }
+
+            appleViews.Clear();
+
+            foreach (var visual in itemVisuals.Values)
+            {
+                if (visual != null) Destroy(visual.gameObject);
+            }
+
+            itemVisuals.Clear();
+
+            foreach (var visual in portalFronts.Values)
+            {
+                if (visual != null) Destroy(visual.gameObject);
+            }
+
+            portalFronts.Clear();
+            portalSides.Clear();
         }
 
         private void PaintStaticCell(PuzzleState state, GridPos position)
@@ -457,17 +631,18 @@ namespace SnakeApple.Presentation.Screens
             }
             else if (value == '2')
             {
-                SetCellSprite(position, itemSkin != null ? itemSkin.AppleNormal : null, Color.white, "APPLE");
+                PaintApple(state, position, false);
             }
             else if (value == '8')
             {
-                SetCellSprite(position, itemSkin != null ? itemSkin.AppleVip : null, Color.white, "VIP");
+                PaintApple(state, position, true);
             }
             else if (value == 'X')
             {
                 var available = IsExitAvailable(state);
                 var tint = available ? Color.white : new Color(0.5f, 0.5f, 0.55f, 0.9f);
-                SetCellSprite(position, itemSkin != null ? itemSkin.ExitPortal : null, tint, available ? "EXIT" : "LOCK");
+                SetCellSprite(position, itemSkin != null ? itemSkin.ExitPortal : null, tint, available ? "EXIT" : "LOCK",
+                    0f, 1f, ItemLift);
             }
             else if ("ghij".IndexOf(value) >= 0)
             {
@@ -482,13 +657,9 @@ namespace SnakeApple.Presentation.Screens
             {
                 SetCellSprite(position, itemSkin != null ? itemSkin.SpiderWeb : null, Color.white, "WEB");
             }
-            else if ("ceCE".IndexOf(value) >= 0)
+            else if ("cdefCDEF".IndexOf(value) >= 0)
             {
-                SetCellSprite(position, itemSkin != null ? itemSkin.TeleportBlue : null, Color.white, "PORTAL");
-            }
-            else if ("dfDF".IndexOf(value) >= 0)
-            {
-                SetCellSprite(position, itemSkin != null ? itemSkin.TeleportOrange : null, Color.white, "PORTAL");
+                PaintTeleport(state, position, value);
             }
             else if ("LMNOQRST".IndexOf(value) >= 0)
             {
@@ -704,6 +875,7 @@ namespace SnakeApple.Presentation.Screens
         private IEnumerator BumpHeadRoutine(Direction direction, MoveRejectionReason reason)
         {
             isAnimating = true;
+            AudioManager.Play(SfxCue.Blocked);
             feedbackText.text = $"Blocked: {reason}";
 
             Transform headTransform = null;
@@ -769,6 +941,16 @@ namespace SnakeApple.Presentation.Screens
                 endPositions[i] = GetCellLocalPosition(slideSnake[i]);
             }
 
+            AudioManager.Play(SfxCue.Move);
+            for (var i = 0; i < slideSnake.Count && i < startSnake.Count; i++)
+            {
+                if (startSnake[i].ManhattanDistance(slideSnake[i]) > 1)
+                {
+                    AudioManager.Play(SfxCue.Teleport);
+                    break;
+                }
+            }
+
             // Phase 1: Forward slide (0.12s)
             const float slideDuration = 0.12f;
             var elapsed = 0f;
@@ -782,7 +964,11 @@ namespace SnakeApple.Presentation.Screens
 
                 for (var i = 0; i < slideSnake.Count; i++)
                 {
-                    currentPositions[i] = Vector3.Lerp(startPositions[i], endPositions[i], easeT);
+                    // A segment that went through a teleporter must not fly across the board: snap to the exit.
+                    var teleported = i < startSnake.Count && startSnake[i].ManhattanDistance(slideSnake[i]) > 1;
+                    currentPositions[i] = teleported
+                        ? Vector3.Lerp(PortalMouthPosition(startState, slideSnake[i], endPositions[i]), endPositions[i], easeT)
+                        : Vector3.Lerp(startPositions[i], endPositions[i], easeT);
                 }
 
                 RenderSnakeInterpolated(slideSnake, currentPositions);
@@ -793,6 +979,7 @@ namespace SnakeApple.Presentation.Screens
             if (result.AteApple && slideSnake.Count > 0)
             {
                 GetActiveSpineHead()?.PlayEat();
+                AudioManager.Play(SfxCue.AppleEat);
                 SetCell(slideSnake[0], FloorColor, string.Empty);
                 var punchElapsed = 0f;
                 const float punchDuration = 0.08f;
@@ -833,6 +1020,7 @@ namespace SnakeApple.Presentation.Screens
                     }
                 }
 
+                AudioManager.Play(SfxCue.Fall);
                 var dropCells = fellOutside ? 6 : Mathf.Abs(slideSnake[0].Y - finalSnake[0].Y);
                 var fallDuration = Mathf.Clamp(dropCells * 0.065f, 0.08f, 0.28f);
                 var fallElapsed = 0f;
@@ -856,6 +1044,7 @@ namespace SnakeApple.Presentation.Screens
                 // Landing squash bounce (if landed inside board)
                 if (!fellOutside)
                 {
+                    AudioManager.Play(SfxCue.Land);
                     var bounceElapsed = 0f;
                     const float bounceDuration = 0.09f;
                     while (bounceElapsed < bounceDuration)
@@ -875,6 +1064,10 @@ namespace SnakeApple.Presentation.Screens
             {
                 GetActiveSpineHead()?.PlayWin();
                 var reward = CommitCompletion();
+                AudioManager.Play(SfxCue.Win);
+                AudioManager.Play(SfxCue.WinFanfare);
+                AudioManager.Play(SfxCue.Firework);
+                if (reward > 0) AudioManager.Play(SfxCue.CoinReward);
                 RefreshBoard(reward > 0 ? $"Level complete! +{reward} coins" : "Level complete!");
                 UiLookup.Find<Text>(winOverlay.transform, "WinMoveText").text =
                     $"Solved in {result.State.TurnIndex} moves";
@@ -884,6 +1077,7 @@ namespace SnakeApple.Presentation.Screens
             else if (result.State.Status == SessionStatus.Lost)
             {
                 GetActiveSpineHead()?.PlayDie();
+                PlayLossSound(result.State.LossReason);
                 RefreshBoard($"Try again: {result.State.LossReason}");
                 loseSubtitleText.text = LossMessage(result.State.LossReason);
                 loseOverlay.SetActive(true);
@@ -902,6 +1096,20 @@ namespace SnakeApple.Presentation.Screens
                 queuedDirection = null;
                 TryMove(nextDir);
             }
+        }
+
+        private static void PlayLossSound(PuzzleLossReason reason)
+        {
+            switch (reason)
+            {
+                case PuzzleLossReason.Spike: AudioManager.Play(SfxCue.Spike); break;
+                case PuzzleLossReason.Toxic: AudioManager.Play(SfxCue.Toxic); break;
+                case PuzzleLossReason.Explosion: AudioManager.Play(SfxCue.Explosion); break;
+                case PuzzleLossReason.Laser:
+                case PuzzleLossReason.Crushed: AudioManager.Play(SfxCue.Hurt); break;
+                case PuzzleLossReason.FellOutside: AudioManager.Play(SfxCue.Scream); break;
+            }
+            AudioManager.Play(SfxCue.Lose);
         }
 
         private void CancelActiveAnimation()
@@ -944,6 +1152,7 @@ namespace SnakeApple.Presentation.Screens
             if (session != null && session.Undo())
             {
                 if (acceptedMoves.Count > 0) acceptedMoves.RemoveAt(acceptedMoves.Count - 1);
+                AudioManager.Play(SfxCue.Undo);
                 loseOverlay.SetActive(false);
                 winOverlay.SetActive(false);
                 RefreshBoard("Move undone.");
@@ -979,6 +1188,8 @@ namespace SnakeApple.Presentation.Screens
         private void RestartFromPause() { HidePause(); Restart(); }
         private void UndoFromLose() { loseOverlay.SetActive(false); Undo(); }
         private void RestartFromLose() { loseOverlay.SetActive(false); Restart(); }
+        public bool IsGameplayOverlayOpen => IsModalOpen();
+
         private bool IsModalOpen() => pauseOverlay.activeSelf || pauseSettingsOverlay.activeSelf ||
                                       confirmHomeOverlay.activeSelf || winOverlay.activeSelf || loseOverlay.activeSelf;
 
@@ -1073,19 +1284,30 @@ namespace SnakeApple.Presentation.Screens
             image.color = color;
             image.rectTransform.localEulerAngles = Vector3.zero;
             cellLabels[position].text = label;
+            RemoveItemVisual(position);
+        }
 
-            if (cellRects.TryGetValue(position, out var cellRect))
+        private void RemoveItemVisual(GridPos position)
+        {
+            if (portalFronts.TryGetValue(position, out var front))
             {
-                var visual = cellRect.Find("ObjectVisual");
-                if (visual != null)
-                {
-                    visual.gameObject.SetActive(false);
-                    Destroy(visual.gameObject);
-                }
+                portalFronts.Remove(position);
+                if (front != null) Destroy(front.gameObject);
+            }
+
+            if (!itemVisuals.TryGetValue(position, out var visual)) return;
+            itemVisuals.Remove(position);
+            if (visual != null)
+            {
+                visual.gameObject.SetActive(false);
+                Destroy(visual.gameObject);
             }
         }
 
-        private void SetCellSprite(GridPos position, Sprite sprite, Color tint, string fallbackLabel, float rotation = 0f, float scale = 1f)
+        // Item sprites (exit, hazards, rocks, doors...) are drawn in the item overlay, above wall tiles, so the
+        // sprites that wall tiles spill into neighbouring cells can never cover them. `lift` raises the item
+        // (fraction of a cell) so it lines up with the raised top faces of the blocks.
+        private void SetCellSprite(GridPos position, Sprite sprite, Color tint, string fallbackLabel, float rotation = 0f, float scale = 1f, float lift = 0f)
         {
             if (!cellImages.TryGetValue(position, out var baseImage)) return;
             if (sprite == null)
@@ -1094,16 +1316,7 @@ namespace SnakeApple.Presentation.Screens
                 baseImage.color = tint;
                 baseImage.rectTransform.localEulerAngles = Vector3.zero;
                 cellLabels[position].text = fallbackLabel ?? string.Empty;
-
-                if (cellRects.TryGetValue(position, out var emptyRect))
-                {
-                    var visual = emptyRect.Find("ObjectVisual");
-                    if (visual != null)
-                    {
-                        visual.gameObject.SetActive(false);
-                        Destroy(visual.gameObject);
-                    }
-                }
+                RemoveItemVisual(position);
                 return;
             }
 
@@ -1112,23 +1325,18 @@ namespace SnakeApple.Presentation.Screens
             cellLabels[position].text = string.Empty;
 
             var cellRect = cellRects[position];
-            var visualTransform = cellRect.Find("ObjectVisual");
-            GameObject visualObject;
-            if (visualTransform != null)
+            var parent = itemOverlay != null ? (Transform)itemOverlay : cellRect;
+            if (!itemVisuals.TryGetValue(position, out var visualRect) || visualRect == null)
             {
-                visualObject = visualTransform.gameObject;
-                visualObject.SetActive(true);
-            }
-            else
-            {
-                visualObject = new GameObject("ObjectVisual", typeof(RectTransform), typeof(Image));
-                visualObject.transform.SetParent(cellRect, false);
+                var visualObject = new GameObject("ObjectVisual", typeof(RectTransform), typeof(Image));
+                visualObject.transform.SetParent(parent, false);
+                visualRect = (RectTransform)visualObject.transform;
+                itemVisuals[position] = visualRect;
             }
 
-            var visualRect = (RectTransform)visualObject.transform;
+            visualRect.gameObject.SetActive(true);
             visualRect.anchorMin = visualRect.anchorMax = new Vector2(0.5f, 0.5f);
             visualRect.pivot = new Vector2(0.5f, 0.5f);
-            visualRect.anchoredPosition = Vector2.zero;
             visualRect.localEulerAngles = new Vector3(0f, 0f, rotation);
 
             var cellSize = Mathf.Min(cellRect.rect.width, cellRect.rect.height);
@@ -1139,14 +1347,100 @@ namespace SnakeApple.Presentation.Screens
                 if (cellSize <= 0f) cellSize = 64f;
             }
 
+            var center = itemOverlay != null
+                ? (Vector2)itemOverlay.InverseTransformPoint(cellRect.position)
+                : Vector2.zero;
+            visualRect.anchoredPosition = center + new Vector2(0f, cellSize * lift);
             visualRect.sizeDelta = new Vector2(cellSize * scale, cellSize * scale);
 
-            var visualImage = visualObject.GetComponent<Image>();
+            var visualImage = visualRect.GetComponent<Image>();
             visualImage.sprite = sprite;
             visualImage.color = tint;
             visualImage.type = Image.Type.Simple;
             visualImage.preserveAspect = true;
             visualImage.raycastTarget = false;
+        }
+
+        // V1 builds a teleporter from layers: a glowing disc behind the snake and a metal rim in front of it, offset
+        // towards the side where the hidden pocket (a wall cell) is. Lower case pairs are blue/green, upper case purple.
+        private void PaintTeleport(PuzzleState state, GridPos position, char value)
+        {
+            var green = "dfDF".IndexOf(value) >= 0;
+            var gate = itemSkin != null ? (green ? itemSkin.TeleportOrange : itemSkin.TeleportBlue) : null;
+            Sprite core = null;
+            if (itemSkin != null)
+            {
+                core = char.IsUpper(value)
+                    ? itemSkin.TeleportCorePurple
+                    : green ? itemSkin.TeleportCoreOrange : itemSkin.TeleportCoreBlue;
+            }
+
+            if (gate == null || core == null || itemOverlay == null || portalFrontOverlay == null ||
+                !cellRects.ContainsKey(position))
+            {
+                SetCellSprite(position, gate, Color.white, "PORTAL");
+                return;
+            }
+
+            var pocketRight = IsPortalWall(state, position + new GridPos(1, 0)) &&
+                              !IsPortalWall(state, position + new GridPos(-1, 0));
+            var side = pocketRight ? 1f : -1f;
+            portalSides[position] = side;
+            var coreX = side * 0.25f;
+            var gateX = coreX - side * 0.148f;
+
+            if (cellImages.TryGetValue(position, out var baseImage))
+            {
+                baseImage.sprite = null;
+                baseImage.color = Color.clear;
+                cellLabels[position].text = string.Empty;
+            }
+
+            PlacePortalPiece(itemVisuals, itemOverlay, position, core, new Vector2(0.342f, 0.956f), coreX, pocketRight);
+            PlacePortalPiece(portalFronts, portalFrontOverlay, position, gate, new Vector2(0.406f, 1.028f), gateX, pocketRight);
+        }
+
+        private void PlacePortalPiece(
+            Dictionary<GridPos, RectTransform> store,
+            RectTransform overlay,
+            GridPos position,
+            Sprite sprite,
+            Vector2 sizeInCells,
+            float offsetInCells,
+            bool mirror)
+        {
+            var cellRect = cellRects[position];
+            var cellSize = Mathf.Min(cellRect.rect.width, cellRect.rect.height);
+            if (cellSize <= 0f) cellSize = GetCellSize();
+
+            if (!store.TryGetValue(position, out var rect) || rect == null)
+            {
+                var piece = new GameObject("PortalPiece", typeof(RectTransform), typeof(Image));
+                piece.transform.SetParent(overlay, false);
+                rect = (RectTransform)piece.transform;
+                store[position] = rect;
+            }
+
+            rect.gameObject.SetActive(true);
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+            var center = (Vector2)overlay.InverseTransformPoint(cellRect.position);
+            rect.anchoredPosition = center + new Vector2(offsetInCells * cellSize, 0f);
+            rect.sizeDelta = new Vector2(sizeInCells.x * cellSize, sizeInCells.y * cellSize);
+            rect.localScale = new Vector3(mirror ? -1f : 1f, 1f, 1f);
+            rect.localEulerAngles = Vector3.zero;
+
+            var image = rect.GetComponent<Image>();
+            image.sprite = sprite;
+            image.color = Color.white;
+            image.type = Image.Type.Simple;
+            image.preserveAspect = false;
+            image.raycastTarget = false;
+        }
+
+        private static bool IsPortalWall(PuzzleState state, GridPos position)
+        {
+            var value = state.CellAt(position);
+            return value == '1' || value == '7' || value == 'p' || value == 'B';
         }
 
         public bool HasItemSkin => itemSkin != null && itemSkin.IsConfigured;
@@ -1245,6 +1539,13 @@ namespace SnakeApple.Presentation.Screens
             for (var index = snake.Count - 1; index >= 0; index--)
             {
                 var position = snake[index];
+                if (IsInsidePortalPocket(position))
+                {
+                    // The body is inside the teleporter's hidden pocket: it is not drawn until it comes out.
+                    snakeSegments[snake.Count - 1 - index].SetActive(false);
+                    continue;
+                }
+
                 var localPos = customPositions != null && index < customPositions.Length
                     ? customPositions[index]
                     : GetCellLocalPosition(position);
@@ -1257,16 +1558,9 @@ namespace SnakeApple.Presentation.Screens
                 if (index == 0)
                 {
                     sprite = legacySnakeSkin.Head;
-                    var headDir = RotationForDirection(position, snake[Mathf.Min(1, snake.Count - 1)], true);
-                    if (Mathf.Approximately(headDir, 180f))
-                    {
-                        rotation = 0f;
-                        scale = new Vector3(-1f, 1f, 1f);
-                    }
-                    else
-                    {
-                        rotation = headDir;
-                    }
+                    // The whole snake is one rigid ribbon: crawling back leaves the back down-side-up, so the
+                    // head rotates (upside down when it heads west) instead of being mirrored.
+                    rotation = RotationForDirection(position, ResolveVisualNeighbor(position, snake[Mathf.Min(1, snake.Count - 1)]), true);
 
                     size = new Vector2(
                         size.x * legacySnakeSkin.HeadWidthInCells,
@@ -1277,20 +1571,26 @@ namespace SnakeApple.Presentation.Screens
                 else if (index == snake.Count - 1)
                 {
                     sprite = legacySnakeSkin.TailAt(PhaseForSegment(index));
-                    rotation = RotationForDirection(position, snake[index - 1], false);
+                    rotation = RotationForDirection(position, ResolveVisualNeighbor(position, snake[index - 1]), false);
                 }
                 else
                 {
-                    var previous = snake[index - 1];
-                    var next = snake[index + 1];
+                    var previous = ResolveVisualNeighbor(position, snake[index - 1]);
+                    var next = ResolveVisualNeighbor(position, snake[index + 1]);
                     if (previous.X == next.X || previous.Y == next.Y)
                     {
                         sprite = legacySnakeSkin.BodyAt(PhaseForSegment(index));
-                        rotation = previous.X == next.X ? 90f : 0f;
+                        // Straight runs rotate with the travel direction (tail -> head); the belly is always
+                        // on the right-hand side of that direction, so there is never a twist at a bend.
+                        rotation = RotationForDirection(position, previous, false);
                     }
                     else
                     {
-                        sprite = legacySnakeSkin.CornerAt(PhaseForSegment(index));
+                        // Belly inside the bend uses the base corner art, belly outside uses the mirrored family.
+                        var bellyInside = IsBellyInsideBend(position, previous, next);
+                        sprite = bellyInside
+                            ? legacySnakeSkin.CornerAt(PhaseForSegment(index))
+                            : legacySnakeSkin.CornerOutsideAt(PhaseForSegment(index));
                         rotation = CornerRotation(position, previous, next);
                     }
                 }
@@ -1313,9 +1613,49 @@ namespace SnakeApple.Presentation.Screens
 
                 var image = segmentObj.GetComponent<Image>();
                 var spineChild = segmentObj.transform.Find("SpineHead");
+                var neckChild = segmentObj.transform.Find("SpineNeck");
 
                 if (index == 0 && legacySnakeSkin != null && legacySnakeSkin.UseSpineHead)
                 {
+                    // 1. Neck Underlay setup (ADR-007): bridges round Spine head to flat body segment
+                    var neckSprite = legacySnakeSkin.Neck;
+                    if (neckSprite != null)
+                    {
+                        if (neckChild == null)
+                        {
+                            var neckGo = new GameObject("SpineNeck", typeof(RectTransform), typeof(Image));
+                            neckGo.transform.SetParent(segmentObj.transform, false);
+                            neckChild = neckGo.transform;
+                            var neckImg = neckGo.GetComponent<Image>();
+                            neckImg.raycastTarget = false;
+                        }
+
+                        neckChild.SetSiblingIndex(0);
+                        neckChild.gameObject.SetActive(true);
+
+                        var neckImgComp = neckChild.GetComponent<Image>();
+                        if (neckImgComp != null)
+                        {
+                            neckImgComp.sprite = neckSprite;
+                            neckImgComp.color = Color.white;
+                            neckImgComp.preserveAspect = false;
+                            neckImgComp.raycastTarget = false;
+                        }
+
+                        var neckRect = (RectTransform)neckChild;
+                        neckRect.anchorMin = neckRect.anchorMax = neckRect.pivot = new Vector2(0f, 0.5f);
+                        neckRect.localPosition = new Vector3(-size.x * 0.5f, 0f, 0f);
+                        var neckAspect = neckSprite.rect.height > 0f ? (neckSprite.rect.width / neckSprite.rect.height) : (146f / 256f);
+                        neckRect.sizeDelta = new Vector2(size.x * neckAspect, size.y);
+                        neckRect.localScale = Vector3.one;
+                        neckRect.localRotation = Quaternion.identity;
+                    }
+                    else if (neckChild != null)
+                    {
+                        neckChild.gameObject.SetActive(false);
+                    }
+
+                    // 2. Spine Head setup
                     if (spineChild == null)
                     {
                         var spineGo = new GameObject("SpineHead", typeof(RectTransform));
@@ -1323,9 +1663,13 @@ namespace SnakeApple.Presentation.Screens
                         spineChild = spineGo.transform;
                     }
 
+                    spineChild.SetSiblingIndex(1);
+
                     var spineRect = (RectTransform)spineChild;
                     spineRect.anchorMin = spineRect.anchorMax = spineRect.pivot = new Vector2(0.5f, 0.5f);
-                    spineRect.localPosition = new Vector3(0f, -size.y * 0.45f, 0f);
+                    // The V1 rig origin is at the base of the head. Align it with the cell's
+                    // lower edge, matching the full-height neck instead of raising it by 0.05 cells.
+                    spineRect.localPosition = new Vector3(-baseCellSize.x * 0.0652f, -size.y * 0.5f, 0f);
                     spineRect.sizeDelta = size;
                     spineRect.localScale = new Vector3(size.x / 480f, size.y / 480f, 1f);
 
@@ -1345,14 +1689,13 @@ namespace SnakeApple.Presentation.Screens
                         spineChild.gameObject.SetActive(true);
                         if (image != null) image.enabled = false;
 
-                        if (session != null && IsAdjacentToApple(session.CurrentState, position))
-                        {
-                            spineHead.PlayOpenMouth();
-                        }
+                        spineHead.UpdateAppleProximity(
+                            session != null && IsAdjacentToApple(session.CurrentState, position));
                     }
                     else
                     {
                         // Fallback to Sprite head if Spine is not ready or failed to initialize
+                        if (neckChild != null) neckChild.gameObject.SetActive(false);
                         spineChild.gameObject.SetActive(false);
                         if (image != null)
                         {
@@ -1366,6 +1709,11 @@ namespace SnakeApple.Presentation.Screens
                 }
                 else
                 {
+                    if (neckChild != null)
+                    {
+                        neckChild.gameObject.SetActive(false);
+                    }
+
                     if (spineChild != null)
                     {
                         spineChild.gameObject.SetActive(false);
@@ -1380,6 +1728,8 @@ namespace SnakeApple.Presentation.Screens
                         image.raycastTarget = false;
                     }
                 }
+
+                ApplyPortalClip(segmentObj, image, spineChild, localPos, size, rotation);
 
                 if (cellLabels.TryGetValue(position, out var label))
                 {
@@ -1446,6 +1796,136 @@ namespace SnakeApple.Presentation.Screens
             if (y > 0) return 90f;
             if (x < 0) return 180f;
             return -90f;
+        }
+
+        // The belly stays on the right-hand side of the tail -> head travel, so it is inside the bend on right turns.
+        private static bool IsBellyInsideBend(GridPos position, GridPos previous, GridPos next)
+        {
+            // Travel goes tail -> head: in = next -> position, out = position -> previous.
+            var inX = position.X - next.X;
+            var inY = position.Y - next.Y;
+            var outX = previous.X - position.X;
+            var outY = previous.Y - position.Y;
+            var cross = inX * outY - inY * outX; // > 0 : left turn, < 0 : right turn
+            return cross < 0;
+        }
+
+        // The cell of the teleporter a segment is coming out of: it slides from the gate plane to its exit cell.
+        private Vector3 PortalMouthPosition(PuzzleState state, GridPos exitCell, Vector3 fallback)
+        {
+            var offsets = new[] { new GridPos(1, 0), new GridPos(-1, 0), new GridPos(0, 1), new GridPos(0, -1) };
+            for (var index = 0; index < offsets.Length; index++)
+            {
+                var candidate = exitCell + offsets[index];
+                if ("cdefCDEF".IndexOf(state.CellAt(candidate)) < 0) continue;
+                var mouth = GetCellLocalPosition(candidate);
+                // Start fully behind the gate plane (plane = 0.25 cell towards the pocket, plus half a segment), so the
+                // segment is revealed progressively as it slides out of the disc.
+                if (portalSides.TryGetValue(candidate, out var side)) mouth.x += side * 0.75f * GetCellSize();
+                return mouth;
+            }
+
+            return fallback;
+        }
+
+        // Clips a segment at the plane of every nearby teleporter, like V1's portal mask: whatever is beyond the plane
+        // (towards the hidden pocket) is not drawn, so the body looks like it passes through the gate disc.
+        private void ApplyPortalClip(
+            GameObject segmentObj,
+            Image image,
+            Transform spineChild,
+            Vector3 localPos,
+            Vector2 size,
+            float rotation)
+        {
+            var mask = segmentObj.GetComponent<RectMask2D>();
+            if (image != null && image.type != Image.Type.Simple) image.type = Image.Type.Simple;
+            if (mask != null) mask.enabled = false;
+            if (portalSides.Count == 0 || size.x <= 0f) return;
+
+            var left = localPos.x - size.x * 0.5f;
+            var right = localPos.x + size.x * 0.5f;
+            var hiddenLeft = 0f;
+            var hiddenRight = 0f;
+            foreach (var pair in portalSides)
+            {
+                var center = GetCellLocalPosition(pair.Key);
+                if (Mathf.Abs(center.y - localPos.y) > size.y * 0.45f) continue;
+                var plane = center.x + pair.Value * 0.25f * size.x;
+                if (Mathf.Abs(localPos.x - plane) > size.x * 1.5f) continue;
+                if (pair.Value < 0f)
+                {
+                    hiddenLeft = Mathf.Max(hiddenLeft, Mathf.Clamp(plane - left, 0f, size.x));
+                }
+                else
+                {
+                    hiddenRight = Mathf.Max(hiddenRight, Mathf.Clamp(right - plane, 0f, size.x));
+                }
+            }
+
+            var hidden = hiddenLeft + hiddenRight;
+            if (hidden <= 0.5f) return;
+            if (hidden >= size.x - 0.5f)
+            {
+                segmentObj.SetActive(false);
+                return;
+            }
+
+            var horizontal = Mathf.Approximately(Mathf.Abs(Mathf.Sin(rotation * Mathf.Deg2Rad)), 0f);
+            if (!horizontal)
+            {
+                // A vertical segment next to a gate: keep it simple and hide it once its centre passes the plane.
+                if (hidden > size.x * 0.5f) segmentObj.SetActive(false);
+                return;
+            }
+
+            var flipped = Mathf.Cos(rotation * Mathf.Deg2Rad) < 0f; // 180 degrees: local left is world right
+            var cutLocalLeft = flipped ? hiddenRight : hiddenLeft;
+            var cutLocalRight = flipped ? hiddenLeft : hiddenRight;
+            var spineActive = spineChild != null && spineChild.gameObject.activeSelf;
+            if (spineActive)
+            {
+                if (mask == null) mask = segmentObj.AddComponent<RectMask2D>();
+                var open = -size.x * 3f;
+                mask.padding = new Vector4(
+                    cutLocalLeft > 0f ? cutLocalLeft : open,
+                    open,
+                    cutLocalRight > 0f ? cutLocalRight : open,
+                    open);
+                mask.enabled = true;
+                return;
+            }
+
+            if (image == null || !image.enabled) return;
+            image.type = Image.Type.Filled;
+            image.fillMethod = Image.FillMethod.Horizontal;
+            image.fillOrigin = cutLocalLeft > 0f ? (int)Image.OriginHorizontal.Right : (int)Image.OriginHorizontal.Left;
+            image.fillAmount = Mathf.Clamp01(1f - hidden / size.x);
+        }
+
+        private bool IsInsidePortalPocket(GridPos position)
+        {
+            var state = session != null ? session.CurrentState : null;
+            if (state == null) return false;
+            var value = state.CellAt(position);
+            return value == '1' || value == '7' || value == 'p' || value == 'B';
+        }
+
+        // A neighbouring body segment can be on the far side of a teleporter. Its real cell is not adjacent, so
+        // orient this segment as if the body continued straight out of the portal tile next to it.
+        private GridPos ResolveVisualNeighbor(GridPos position, GridPos neighbor)
+        {
+            if (position.ManhattanDistance(neighbor) == 1) return neighbor;
+            var state = session != null ? session.CurrentState : null;
+            if (state == null) return neighbor;
+            var offsets = new[] { new GridPos(1, 0), new GridPos(-1, 0), new GridPos(0, 1), new GridPos(0, -1) };
+            for (var index = 0; index < offsets.Length; index++)
+            {
+                var candidate = position + offsets[index];
+                if ("cdefCDEF".IndexOf(state.CellAt(candidate)) >= 0) return candidate;
+            }
+
+            return neighbor;
         }
 
         private static float CornerRotation(GridPos position, GridPos previous, GridPos next)

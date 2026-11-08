@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3cc699a2449e9a4587e0eaec376b1fa, type: 3}
+  m_Name: SnakeSkinCatalog
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSkinCatalog
+  entries:
+  - id: nemo
+    displayName: Clownfish
+    price: 0
+    skin: {fileID: 11400000, guid: 5a8c3ce5b419cb54fb5acf823e425b1d, type: 2}
+    preview: {fileID: 21300000, guid: bc023741cb2b426cbd58f027a7e66957, type: 3}
+  - id: dog
+    displayName: Puppy
+    price: 150
+    skin: {fileID: 11400000, guid: 26878c2ff6915bf4aaa3f57859139389, type: 2}
+    preview: {fileID: 21300000, guid: 62b070744b63454a847e6795e589fe00, type: 3}
+  - id: bird
+    displayName: Birdie
+    price: 200
+    skin: {fileID: 11400000, guid: 54e6085eabc8685489117a050bb83dc0, type: 2}
+    preview: {fileID: 21300000, guid: 2ee393defceb43da96274006306478d6, type: 3}
+  - id: frog
+    displayName: Froggy
+    price: 250
+    skin: {fileID: 11400000, guid: 6923fa1ef6c7a6d429febad6a0c712f6, type: 2}
+    preview: {fileID: 21300000, guid: 6c823383bc094d139b2c193e5437fe3f, type: 3}
+  - id: tiger
+    displayName: Tiger
+    price: 300
+    skin: {fileID: 11400000, guid: 5553d21d7a0b98e4ea62fcd8506c3845, type: 2}
+    preview: {fileID: 21300000, guid: 42b702e4b0514d108e845f6d73ef6f27, type: 3}
+  - id: bear
+    displayName: Bear
+    price: 350
+    skin: {fileID: 11400000, guid: 0e78bb5fb62f0c343a629a0a957f861e, type: 2}
+    preview: {fileID: 21300000, guid: 236ba3458f0b4a09a7aec54e18021719, type: 3}
+  - id: unicorn
+    displayName: Unicorn
+    price: 450
+    skin: {fileID: 11400000, guid: 88387b4a99f4d914bad294841d19dc81, type: 2}
+    preview: {fileID: 21300000, guid: 2a2c2e394ff04605930df06b24ce0c4d, type: 3}
+  - id: dragon
+    displayName: Dragon
+    price: 550
+    skin: {fileID: 11400000, guid: da1659c937473ec41807f10010a2ac57, type: 2}
+    preview: {fileID: 21300000, guid: 003d89230cfb42e8a371bb2cea6aacdd, type: 3}
+  - id: sorcerer
+    displayName: Sorcerer
+    price: 600
+    skin: {fileID: 11400000, guid: 6161bcb4a161c9f499d6fb2961400640, type: 2}
+    preview: {fileID: 21300000, guid: 14261be5cafd4af680ceff48357ca9c3, type: 3}
+  - id: thunder
+    displayName: Thunder
+    price: 700
+    skin: {fileID: 11400000, guid: 74c2a8e263749a441b9d4ba48d35b08e, type: 2}
+    preview: {fileID: 21300000, guid: 0e318e9f92b0439596dcfe3dae15036e, type: 3}

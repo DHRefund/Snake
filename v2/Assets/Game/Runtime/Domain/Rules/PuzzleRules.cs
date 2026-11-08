@@ -339,7 +339,49 @@ namespace SnakeApple.Domain.Rules
                     continue;
                 }
 
+                CarryMovablesOnPlatform(state, platform, destination);
                 platform.AtFirst = !platform.AtFirst;
+            }
+        }
+
+        // V1 slide platforms and elevators carry rocks and bombs resting on them. Without this several V1
+        // levels (e.g. Normal 90, 136, 175) cannot be completed because the bomb is left behind.
+        private static void CarryMovablesOnPlatform(PuzzleState state, SlidePlatformState platform, GridPos destination)
+        {
+            var current = platform.Current;
+            var delta = new GridPos(destination.X - current.X, destination.Y - current.Y);
+            var gravity = state.Definition.GravityReversed ? Up : Down;
+            var covered = platform.Horizontal
+                ? new[] { current, new GridPos(current.X - 1, current.Y) }
+                : new[] { current, new GridPos(current.X, current.Y - 1) };
+
+            var carried = new List<GridPos>();
+            foreach (var position in state.MutableMovables.Keys)
+            {
+                for (var index = 0; index < covered.Length; index++)
+                {
+                    if (position.X == covered[index].X - gravity.X && position.Y == covered[index].Y - gravity.Y)
+                    {
+                        carried.Add(position);
+                        break;
+                    }
+                }
+            }
+
+            if (carried.Count == 0) return;
+            carried.Sort((left, right) => delta.Y > 0 ? right.Y.CompareTo(left.Y) : left.Y.CompareTo(right.Y));
+            for (var index = 0; index < carried.Count; index++)
+            {
+                var target = carried[index] + delta;
+                if (!state.Size.Contains(target) || IsHardBlockExceptPlatforms(state, target) ||
+                    state.MutableMovables.ContainsKey(target) || state.MutableSnake.Contains(target))
+                {
+                    continue;
+                }
+
+                var kind = state.MutableMovables[carried[index]];
+                state.MutableMovables.Remove(carried[index]);
+                state.MutableMovables[target] = kind;
             }
         }
 

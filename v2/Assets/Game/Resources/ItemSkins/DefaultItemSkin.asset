@@ -14,10 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Items.GameplayItemSkin
   appleNormal: {fileID: 21300000, guid: 6449fbf21e9e8b042953c1c9eb511e94, type: 3}
   appleVip: {fileID: 21300000, guid: 586e21462f8ae1d4d875978e15e8e68f, type: 3}
+  appleShadow: {fileID: 21300000, guid: a6d25e7fc43c4d53a82c73aab8664630, type: 3}
+  sparkle: {fileID: 21300000, guid: 4ca1999ae20d43b397d2ea64f17fa1dd, type: 3}
+  glow: {fileID: 21300000, guid: ef602b60663141c8b850d5bbd7a23605, type: 3}
   exitPortal: {fileID: 21300000, guid: ace5010b84e96b64cbcaa6690ff21a84, type: 3}
   exitPortalFrame: {fileID: 21300000, guid: f4559111483a6914e89a6bec57c94827, type: 3}
   teleportBlue: {fileID: 21300000, guid: f6d3e198a88740c4ebe64ddd809c580c, type: 3}
   teleportOrange: {fileID: 21300000, guid: 5a7bee1024b28df46881199e73a68056, type: 3}
+  teleportCoreBlue: {fileID: 21300000, guid: 7dcfe2442fd6fff47b43ae1479b5bb78, type: 3}
+  teleportCoreOrange: {fileID: 21300000, guid: efb54339eaac11e43a1cac2c0f8015c4, type: 3}
+  teleportCorePurple: {fileID: 21300000, guid: e35a5abcd08245b4b61225ed312fa3b1, type: 3}
   spike: {fileID: 21300000, guid: 101c8a824fdd8554aa2eb7c71603e1f5, type: 3}
   toxicAcid: {fileID: 21300000, guid: e2698dbbe4b675d4c878edff270c011b, type: 3}
   spiderWeb: {fileID: 21300000, guid: 2cdee053f28a6b145b735b20933aa55e, type: 3}

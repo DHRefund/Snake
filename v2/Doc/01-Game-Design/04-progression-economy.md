@@ -70,11 +70,56 @@ Miễn phí và không giới hạn. Undo là công cụ suy luận, không ph�
 
 ## 6. Cosmetic
 
-- Skin sâu, block theme và background không thay đổi collision hoặc hitbox.
-- Không dùng màu cosmetic làm mất khả năng nhận biết mechanic.
-- Preview cosmetic không cần tải lại simulation.
-- Giá launch cho 12 slot skin lần lượt là `0, 150, 200, 250, 300, 350, 400,
-  450, 500, 550, 600, 700` coin; slot không có asset thật phải bị ẩn.
+Ba nhóm cosmetic đều mua bằng coin, không đổi collision hoặc hitbox, không dùng màu làm mất
+khả năng nhận biết mechanic. Preview không cần tải lại simulation. Mục đầu tiên của mỗi nhóm
+(index 0) miễn phí và luôn được mở. Index là giá trị lưu trong save nên chỉ được thêm vào cuối,
+không đổi thứ tự. Mục chưa có asset thật bị ẩn khỏi shop nhưng vẫn giữ chỗ trong catalog.
+
+### 6.1 Skin rắn (10 slot, skin V1 đã phối màu lại)
+
+| Slot | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Skin | nemo | dog | bird | frog | tiger | bear | unicorn | dragon | sorcerer | thunder |
+| Giá (coin) | 0 | 150 | 200 | 250 | 300 | 350 | 450 | 550 | 600 | 700 |
+
+Bảng màu mới và cách đổi nằm ở `Doc/08-Appendix/02-snake-skins-v1-to-v2.md`. Skin cat và classic do V2 tự làm
+không còn trong catalog (asset vẫn còn trong `Resources/SnakeSkins` cho test).
+
+### 6.2 Block theme
+
+Mỗi theme là một bộ 48 sprite autotile (16 mask x 3 variant). Theme chỉ xuất hiện trong shop khi
+đủ 16 mask. Block theme áp dụng cho mọi level, không gắn với chapter.
+
+| Index | Theme | Giá (coin) |
+|---|---|---|
+| 0 | Frosty Ice (`ice`) | 0 |
+| 1 | Sandstone (`desert`) | 200 |
+| 2 | Mossy Wood (`forest`) | 300 |
+| 3 | Volcano (`lava`) | 400 |
+| 4 | Candy Land (`candy`) | 500 |
+| 5 | Midnight (`night`) | 600 |
+
+### 6.3 Background
+
+Background thay ảnh nền của màn Gameplay; các màn khác giữ nền riêng.
+
+| Index | Background | Giá (coin) |
+|---|---|---|
+| 0 | Iceberg (`iceberg`) | 0 |
+| 1 | Desert Day (`desert`) | 150 |
+| 2 | Sky Clouds (`clouds`) | 250 |
+
+### 6.4 Cơ sở định giá
+
+- Block theme định giá 200-600, background 150-250: một block theme tương đương một skin rắn
+  tầm trung, background rẻ hơn vì chỉ đổi nền. Cả hai đều thấp hơn skin đắt nhất (700).
+- Nguồn coin: 10 coin mỗi level lần đầu, cộng 5 mỗi Apple VIP, cộng Rewarded tối đa
+  `5 x 50 = 250 coin` mỗi 24 giờ.
+- Ví dụ: người chơi xong 20 level đầu (khoảng 200-300 coin) mua được một background hoặc một block
+  theme rẻ. Mua toàn bộ block theme (2000) và background (400) cần khoảng 2400 coin, tương đương
+  10 ngày xem đủ ad hoặc vài trăm level.
+- Toàn bộ giá nằm trong catalog (`ThemeCatalog`, `SnakeSkinCatalog`), chỉnh giá không cần sửa code.
+  Giá là giá trị khởi điểm, cần điều chỉnh theo dữ liệu thực tế (tỷ lệ mua, tốc độ kiếm coin).
 
 ## 7. Monetization guardrails
 
@@ -83,5 +128,7 @@ Miễn phí và không giới hạn. Undo là công cụ suy luận, không ph�
 - IAP và ads không được tham chiếu từ Core Simulation.
 - Có chế độ development tắt toàn bộ monetization.
 - Trẻ em và quyền riêng tư phải được xử lý theo thị trường phát hành.
-- Release dùng Rewarded và Interstitial; không dùng Banner hoặc App Open Ad.
-- No-ads IAP nếu bổ sung chỉ tắt Interstitial, không ẩn Rewarded tự nguyện.
+- Release dùng Banner adaptive ở đáy Gameplay, Rewarded và Interstitial; không dùng App Open Ad.
+- Banner có vùng riêng trong safe area, cách nút điều khiển tối thiểu 16 dp; không đè lên board hoặc CTA.
+- Banner ẩn khi mở Pause, Settings trong Pause, xác nhận rời màn, Win hoặc Lose; vùng bố cục vẫn được giữ để tránh nhảy UI.
+- No-ads IAP nếu bổ sung tắt Banner và Interstitial, không ẩn Rewarded tự nguyện.

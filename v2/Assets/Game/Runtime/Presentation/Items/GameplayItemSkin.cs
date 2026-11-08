@@ -8,12 +8,19 @@ namespace SnakeApple.Presentation.Items
         [Header("Food & Collectibles")]
         [SerializeField] private Sprite appleNormal;
         [SerializeField] private Sprite appleVip;
+        [SerializeField] private Sprite appleShadow;
+        [SerializeField] private Sprite sparkle;
+        [SerializeField] private Sprite glow;
 
         [Header("Exit & Portals")]
         [SerializeField] private Sprite exitPortal;
         [SerializeField] private Sprite exitPortalFrame;
         [SerializeField] private Sprite teleportBlue;
         [SerializeField] private Sprite teleportOrange;
+        [Tooltip("Glowing disc drawn behind the snake; the gate rim above is drawn in front of it (V1 layers 2 and 1).")]
+        [SerializeField] private Sprite teleportCoreBlue;
+        [SerializeField] private Sprite teleportCoreOrange;
+        [SerializeField] private Sprite teleportCorePurple;
 
         [Header("Hazards")]
         [SerializeField] private Sprite spike;
@@ -37,10 +44,16 @@ namespace SnakeApple.Presentation.Items
 
         public Sprite AppleNormal => appleNormal;
         public Sprite AppleVip => appleVip;
+        public Sprite AppleShadow => appleShadow;
+        public Sprite Sparkle => sparkle;
+        public Sprite Glow => glow;
         public Sprite ExitPortal => exitPortal;
         public Sprite ExitPortalFrame => exitPortalFrame;
         public Sprite TeleportBlue => teleportBlue;
         public Sprite TeleportOrange => teleportOrange;
+        public Sprite TeleportCoreBlue => teleportCoreBlue;
+        public Sprite TeleportCoreOrange => teleportCoreOrange;
+        public Sprite TeleportCorePurple => teleportCorePurple;
         public Sprite Spike => spike;
         public Sprite ToxicAcid => toxicAcid;
         public Sprite SpiderWeb => spiderWeb;

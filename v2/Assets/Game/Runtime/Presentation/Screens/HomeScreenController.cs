@@ -13,7 +13,10 @@ namespace SnakeApple.Presentation.Screens
         private void Awake()
         {
             navigator = GetComponent<ScreenNavigator>();
-            UiLookup.Find<Button>(transform, "PlayButton").onClick.AddListener(ContinueGame);
+            var playButton = UiLookup.Find<Button>(transform, "PlayButton");
+            playButton.onClick.AddListener(ContinueGame);
+            var playLabel = playButton.GetComponentInChildren<Text>();
+            if (playLabel != null) playLabel.text = HasProgress() ? "CONTINUE" : "PLAY";
             UiLookup.Find<Button>(transform, "LevelsButton").onClick.AddListener(() => navigator.Load(ScreenNames.LevelSelect));
             UiLookup.Find<Button>(transform, "CosmeticsButton").onClick.AddListener(() => navigator.Load(ScreenNames.Cosmetics));
             UiLookup.Find<Button>(transform, "SettingsButton").onClick.AddListener(() => navigator.Load(ScreenNames.Settings));
@@ -23,6 +26,13 @@ namespace SnakeApple.Presentation.Screens
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape)) UnityEngine.Application.Quit();
+        }
+
+        private static bool HasProgress()
+        {
+            return LevelProgressStore.SelectedMode != LevelProgressStore.NormalMode ||
+                   LevelProgressStore.SelectedLevel > 1 ||
+                   LevelProgressStore.IsCompleted(LevelProgressStore.NormalMode, 1);
         }
 
         private void ContinueGame()

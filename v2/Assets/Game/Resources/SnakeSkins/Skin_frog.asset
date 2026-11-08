@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd1408b0df40d7ad9cddc0d5784f26, type: 3}
+  m_Name: Skin_frog
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSpriteSkin
+  head: {fileID: 21300000, guid: c7c4363ab81146d88f5b59b8271255eb, type: 3}
+  headWidthInCells: 1
+  headHeightInCells: 1
+  bodyPhases:
+  - {fileID: 21300000, guid: ecc6c690725a42af86443177248069fb, type: 3}
+  - {fileID: 21300000, guid: fc18af4af7ba431c9b85bd01f19061c1, type: 3}
+  - {fileID: 21300000, guid: 21cfa765beb445f9af0795ffe40f9d1a, type: 3}
+  - {fileID: 21300000, guid: 091cd602d0c7429a8e6b3859e6b855c5, type: 3}
+  - {fileID: 21300000, guid: 902ade2a2a5f440fb5bfd1cc96de6509, type: 3}
+  - {fileID: 21300000, guid: 1b880a36bba14f0384774eff5d757e48, type: 3}
+  - {fileID: 21300000, guid: f0ab190a46df46f7bc0866eff4289124, type: 3}
+  - {fileID: 21300000, guid: 6f5a8ed44d64421c97e8090dcffc92e4, type: 3}
+  cornerPhases:
+  - {fileID: 21300000, guid: c1cc620d093e4055a6d486a084cbe66c, type: 3}
+  - {fileID: 21300000, guid: 6f86c6ea39b34b4e9f01b743eb0d05c5, type: 3}
+  - {fileID: 21300000, guid: ac5b65be0e1a403587eae3d1869c52db, type: 3}
+  - {fileID: 21300000, guid: c8b10ab513a646b084dcf6e7e0d70232, type: 3}
+  - {fileID: 21300000, guid: edce480c2afe4670919c99b5b4792574, type: 3}
+  - {fileID: 21300000, guid: c718a88a8d784928b2c3f6b8f13f6ee0, type: 3}
+  - {fileID: 21300000, guid: dfedcb7cb3d24425bceacd3d9b6c7fd8, type: 3}
+  - {fileID: 21300000, guid: 8546d148ba0e49b4a4839da38114980a, type: 3}
+  cornerOutsidePhases:
+  - {fileID: 21300000, guid: b5f95c919cbe4007b962fdd8e25a6d65, type: 3}
+  - {fileID: 21300000, guid: 9de9d8007b6946998878e2e0b7a39b07, type: 3}
+  - {fileID: 21300000, guid: 5b3c737fb8714a9d96305df345cccea5, type: 3}
+  - {fileID: 21300000, guid: 8e1948b8b7e44624bd59184d55005d70, type: 3}
+  - {fileID: 21300000, guid: d825415e5b0e4d5e98e48cd93be26aab, type: 3}
+  - {fileID: 21300000, guid: 34b7587c67c8427695e6de726494565f, type: 3}
+  - {fileID: 21300000, guid: afb1faa97b364d16a9098db3c75994ed, type: 3}
+  - {fileID: 21300000, guid: c86d291fed83427daadc90181fb59e7b, type: 3}
+  tailPhases:
+  - {fileID: 21300000, guid: 457496a0fadb482994a67c49fecbf582, type: 3}
+  - {fileID: 21300000, guid: 9d891d9e0de844f193888a24b4a241ce, type: 3}
+  - {fileID: 21300000, guid: e50851c6fcee47d9be94ebdb4d21354b, type: 3}
+  - {fileID: 21300000, guid: 14836418e5b64996846af23fb9626738, type: 3}
+  - {fileID: 21300000, guid: 2ecddd639ffa474bbffe634bb1fb3e1a, type: 3}
+  - {fileID: 21300000, guid: 1de8512721f14d82be4cc042341619dd, type: 3}
+  - {fileID: 21300000, guid: d725ea46b0ba44c380ecc4d5739afdba, type: 3}
+  - {fileID: 21300000, guid: b520b81bc26441cd990d7d504fb5aacb, type: 3}
+  useSpineHead: 1
+  spineSkinName: skin_frog
+  skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: 388c6f788e054878a7df085f2864bb20, type: 3}

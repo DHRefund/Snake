@@ -97,10 +97,11 @@ namespace SnakeApple.Presentation.Screens
                 var unlocked = exists && LevelProgressStore.IsUnlocked(mode, level);
                 button.gameObject.SetActive(exists);
                 button.interactable = unlocked;
-                var label = button.GetComponentInChildren<Text>();
-                label.text = !exists ? string.Empty : LevelProgressStore.IsCompleted(mode, level)
-                    ? $"{level}\nDONE"
-                    : unlocked ? level.ToString() : $"{level}\nLOCKED";
+                var state = !unlocked ? LevelSlotState.Locked
+                    : LevelProgressStore.IsCompleted(mode, level) ? LevelSlotState.Completed
+                    : LevelSlotState.Available;
+                var view = button.GetComponent<LevelSlotView>();
+                if (view != null) view.Apply(state, level);
                 if (unlocked)
                 {
                     var selectedLevel = level;
@@ -119,15 +120,15 @@ namespace SnakeApple.Presentation.Screens
         {
             button.interactable = true;
             button.GetComponentInChildren<Text>().text = unlocked ? label : label + "\nLOCKED";
-            Color normal = selected
-                ? (Color)new Color32(255, 132, 42, 255)
-                : unlocked ? new Color(1f, 1f, 1f, 0.13f) : new Color(0.2f, 0.3f, 0.3f, 0.42f);
+            // Tabs are sprites, so state is a tint: bright when selected, dimmed otherwise.
+            var tint = selected ? Color.white
+                : unlocked ? new Color(0.62f, 0.62f, 0.62f, 1f) : new Color(0.38f, 0.4f, 0.42f, 1f);
             var colors = button.colors;
-            colors.normalColor = normal;
-            colors.highlightedColor = Color.Lerp(normal, Color.white, 0.16f);
-            colors.pressedColor = Color.Lerp(normal, Color.black, 0.12f);
+            colors.normalColor = tint;
+            colors.highlightedColor = Color.Lerp(tint, Color.white, 0.2f);
+            colors.pressedColor = Color.Lerp(tint, Color.black, 0.15f);
             button.colors = colors;
-            button.GetComponent<Image>().color = normal;
+            button.GetComponent<Image>().color = tint;
         }
 
         private void Play(int level)

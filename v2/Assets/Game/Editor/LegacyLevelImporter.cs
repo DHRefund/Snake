@@ -54,6 +54,28 @@ namespace SnakeApple.Editor
             }
         }
 
+        // Corrections for V1 data that cannot be completed (or hinted) under the V2 rules. Re-applied on every
+        // import so "Import All V1 Levels" never reverts them. See Doc/03-Data/03-v1-level-fixes.md.
+        private static readonly Dictionary<string, string> HintOverrides = new Dictionary<string, string>
+        {
+            { "normal-093", "LLLLLLLLUURRRRRRUURURRURULLLLLLLLUUUUL" },
+            { "normal-119", "RRUURRRRRRRDDDLLLL" },
+            { "normal-177", "RURRURURRURRUUUULLLDLLUULLLDDLLDDDD" }
+        };
+
+        private static void ApplyV2Fixes(List<LegacyLevelRecord> records)
+        {
+            foreach (var record in records)
+            {
+                if (HintOverrides.TryGetValue(record.id, out var hint)) record.solution = hint;
+                // Normal 93: the slide platform flag is inverted in the V1 data; with it flipped the level is solvable.
+                if (record.id == "normal-093" && record.slideBarsHorizontal != null && record.slideBarsHorizontal.Length > 0)
+                {
+                    record.slideBarsHorizontal[0] = true;
+                }
+            }
+        }
+
         private static void ImportAll()
         {
             var resourcesRoot = Path.GetFullPath(Path.Combine(
@@ -69,6 +91,8 @@ namespace SnakeApple.Editor
             ImportMode(resourcesRoot, "snakeapple/easy", "normal", records);
             ImportMode(resourcesRoot, "snakeapple/hard", "hard", records);
             ImportMode(resourcesRoot, "challenge", "challenge", records);
+
+            ApplyV2Fixes(records);
 
             records.Sort((left, right) =>
             {

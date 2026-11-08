@@ -212,6 +212,21 @@ namespace SnakeApple.Presentation.Snake
             PlayAnimation(openMouthAnim, loop);
         }
 
+        public void UpdateAppleProximity(bool isAdjacent)
+        {
+            if (!isInitialized || animState == null) return;
+
+            var currentName = animState.GetCurrent(0)?.Animation.Name;
+            // Proximity controls the resting expression. Let eating, hit, and terminal animations finish.
+            if (currentName != idleAnim && currentName != openMouthAnim) return;
+
+            var nextName = isAdjacent ? openMouthAnim : idleAnim;
+            if (currentName == nextName) return;
+
+            skeleton.SetSlotsToSetupPose();
+            PlayAnimation(nextName, !isAdjacent);
+        }
+
         public void PlayEat()
         {
             PlayAnimation(eatAnim, false);

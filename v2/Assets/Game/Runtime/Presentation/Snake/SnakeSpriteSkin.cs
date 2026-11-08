@@ -11,12 +11,16 @@ namespace SnakeApple.Presentation.Snake
         [SerializeField, Min(0.1f)] private float headHeightInCells = 1f;
         [SerializeField] private Sprite[] bodyPhases = Array.Empty<Sprite>();
         [SerializeField] private Sprite[] cornerPhases = Array.Empty<Sprite>();
+        [Tooltip("Optional corner art with the belly on the OUTSIDE of the bend (V1 corner family 3). Falls back to cornerPhases.")]
+        [SerializeField] private Sprite[] cornerOutsidePhases = Array.Empty<Sprite>();
         [SerializeField] private Sprite[] tailPhases = Array.Empty<Sprite>();
 
         [Header("Spine Head Presentation (ADR-007)")]
         [SerializeField] private bool useSpineHead;
         [SerializeField] private string spineSkinName = "skin_cat";
         [SerializeField] private Spine.Unity.SkeletonDataAsset skeletonDataAsset;
+        [Tooltip("Optional neck transition sprite underlay connecting the round Spine head to the body")]
+        [SerializeField] private Sprite neck;
 
         public Sprite Head => head;
         public float HeadWidthInCells => headWidthInCells;
@@ -26,6 +30,7 @@ namespace SnakeApple.Presentation.Snake
         public bool UseSpineHead => useSpineHead;
         public string SpineSkinName => spineSkinName;
         public Spine.Unity.SkeletonDataAsset SkeletonDataAsset => skeletonDataAsset;
+        public Sprite Neck => neck;
 
         public bool IsConfigured => (head != null || UseSpineHead) &&
                                     HasSprites(bodyPhases) &&
@@ -36,6 +41,8 @@ namespace SnakeApple.Presentation.Snake
 
         public Sprite BodyAt(int phase) => AtPhase(bodyPhases, phase);
         public Sprite CornerAt(int phase) => AtPhase(cornerPhases, phase);
+        public bool HasOutsideCorners => HasSprites(cornerOutsidePhases) && cornerOutsidePhases.Length == cornerPhases.Length;
+        public Sprite CornerOutsideAt(int phase) => HasOutsideCorners ? AtPhase(cornerOutsidePhases, phase) : CornerAt(phase);
         public Sprite TailAt(int phase) => AtPhase(tailPhases, phase);
 
         private static Sprite AtPhase(Sprite[] sprites, int phase)

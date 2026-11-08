@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bd1408b0df40d7ad9cddc0d5784f26, type: 3}
+  m_Name: Skin_tiger
+  m_EditorClassIdentifier: Game.Presentation::SnakeApple.Presentation.Snake.SnakeSpriteSkin
+  head: {fileID: 21300000, guid: c1de30718a0f4d08842e6c46c9e72c8b, type: 3}
+  headWidthInCells: 1
+  headHeightInCells: 1
+  bodyPhases:
+  - {fileID: 21300000, guid: 7253d082e036437eb326af459c596d96, type: 3}
+  - {fileID: 21300000, guid: d6c44a91003a4aa1935cf90fb29e8c19, type: 3}
+  - {fileID: 21300000, guid: 8b4a962fbe43431495f8a8d0aca34a31, type: 3}
+  - {fileID: 21300000, guid: 2973ddf1a0df4d1ba46ea80f76b414cc, type: 3}
+  - {fileID: 21300000, guid: fce58489dd3545bb9baeec6f1a66e5eb, type: 3}
+  - {fileID: 21300000, guid: 2713e7eec0d644be93f7a0b7a1f0f51c, type: 3}
+  - {fileID: 21300000, guid: b19ef58b73ff4e3aaf7e0d5fc4223617, type: 3}
+  - {fileID: 21300000, guid: bd479cc6e1fc42ecae6238969d3803e3, type: 3}
+  cornerPhases:
+  - {fileID: 21300000, guid: 167b0790fc0642d5af32c95dd8e39f2b, type: 3}
+  - {fileID: 21300000, guid: a274f04284dd4deda8b53e945f785769, type: 3}
+  - {fileID: 21300000, guid: 81e4a402ca4b4a9fa9cd9d3ca6e7e80b, type: 3}
+  - {fileID: 21300000, guid: 23541e3cb8b048d1b42861e08e7b1aba, type: 3}
+  - {fileID: 21300000, guid: 21c0982371be4174abc0583afc090ca6, type: 3}
+  - {fileID: 21300000, guid: 0a6ad359b4794435b9cf04eae8293d09, type: 3}
+  - {fileID: 21300000, guid: ac530d3a6e4f439cb2a5f09203bd38e4, type: 3}
+  - {fileID: 21300000, guid: e1698435bd054c6d8cf1323a01cdae5e, type: 3}
+  cornerOutsidePhases:
+  - {fileID: 21300000, guid: 0547e644711141bc8d129879ed0b2154, type: 3}
+  - {fileID: 21300000, guid: 32dd8622a0ee48578b36d51bc8f90ee2, type: 3}
+  - {fileID: 21300000, guid: aa8691d66d944301b2726c35419c5055, type: 3}
+  - {fileID: 21300000, guid: 44bff3c823284f0891aed4f63d1c87de, type: 3}
+  - {fileID: 21300000, guid: 4cf341c9602449b1a172bb82fc5088fe, type: 3}
+  - {fileID: 21300000, guid: dc22731ad8e248319ddb6bb8bac686e2, type: 3}
+  - {fileID: 21300000, guid: ce831ee64bae4ac9aaa802f384fe6027, type: 3}
+  - {fileID: 21300000, guid: 2185b91bca99497bb82463f43bd0089c, type: 3}
+  tailPhases:
+  - {fileID: 21300000, guid: f0157a6bae7644eea84cfae2e223c13a, type: 3}
+  - {fileID: 21300000, guid: 94e1e2bbc4584cff9ba31a162e73c322, type: 3}
+  - {fileID: 21300000, guid: f80a875c2c384da7933fc085ce3c0a35, type: 3}
+  - {fileID: 21300000, guid: 74d89818a2884672bed54b26858e78d8, type: 3}
+  - {fileID: 21300000, guid: ff4e0846a54846f0aeeabb21bebbb6f1, type: 3}
+  - {fileID: 21300000, guid: 73e35b57aadd4490be38be318c23124c, type: 3}
+  - {fileID: 21300000, guid: 8a489c0913594802aee0471b8544b2d4, type: 3}
+  - {fileID: 21300000, guid: b00d9976660545159cde2556c28b199d, type: 3}
+  useSpineHead: 1
+  spineSkinName: skin_tiger
+  skeletonDataAsset: {fileID: 0}
+  neck: {fileID: 21300000, guid: 1b5693993d9241888681238a83cb6777, type: 3}
